@@ -29,43 +29,144 @@ are teaching copies from a BlueField-3 lab; this is not a BlueField-4 deployment
 compatibility claim. The original uploaded diagrams remain unchanged, with
 nearby explanations of their historical labels.
 
-## Quick start
+## Installation options
 
-Use a **Linux x86-64 (amd64)** machine with Docker Engine running, Bash, curl,
-Python 3 and kubectl available in `PATH`. Your account must be able to run Docker.
-The first build/start needs internet access to download dependencies and images.
-The launcher downloads and verifies its pinned kind binary automatically.
+| Option | Availability | Where it runs |
+| --- | --- | --- |
+| [Local Linux installation](#local-linux-installation) | Supported: Linux x86-64 / amd64 | Docker and the training cluster run on your own machine. |
+| [NVIDIA Brev](#nvidia-brev-planned) | Planned for the completed simulator | A dedicated cloud VM with a shareable Launchable. |
+| Native macOS / Apple Silicon / Windows | Not implemented in this launcher | Docker Desktop alone does not make this Linux-only launcher compatible. |
+
+No physical DPU, GPU, existing Kubernetes cluster, or NVIDIA credentials are
+required for the local simulator. The first build and start need internet access.
+The repository builds its container image locally; there is no published image
+or ready-to-use Brev launch button in this release.
+
+## Local Linux installation
+
+Run these commands on the **Linux machine where you will open the browser**.
+Use the same Linux account and checkout for subsequent starts and updates.
+
+### 1. Prepare the machine
+
+| Requirement | Purpose |
+| --- | --- |
+| Linux x86-64 (`uname -sm` shows `Linux x86_64`) | Architecture supported by the launcher and image. |
+| Docker Engine with Buildx | Builds the course image and runs the course and kind nodes. |
+| Git, Bash, curl and Python 3 | Downloads sources and runs the launcher. |
+| kubectl in `PATH` | Prepares access to the dedicated training cluster. |
+| Available local port 8780 | Browser entrypoint. |
+
+The launcher downloads its pinned kind binary automatically. Node.js, npm, Helm,
+Vim and the browser terminal dependencies are installed inside the course image;
+you do not need to install those on the host. Allow capacity for a Docker image
+build and two kind nodes in addition to the course container's 2-CPU / 1-GiB limit.
+That container limit is not a minimum size for the whole machine.
+
+On Ubuntu, install the basic tools if missing:
 
 ```bash
-git clone git@github.com:kirson-git/nico-simulator.git
+sudo apt-get update
+sudo apt-get install -y git curl ca-certificates python3
+```
+
+If Docker is missing, follow the
+[official Docker Engine installation guide for Ubuntu](https://docs.docker.com/engine/install/ubuntu/).
+For another Linux distribution, use its corresponding Docker installation guide.
+Your account must be able to run `docker info` successfully. Docker documents
+[Linux account access setup](https://docs.docker.com/engine/install/linux-postinstall/);
+membership in the Docker group grants root-level privileges.
+
+If kubectl is missing, follow the
+[official kubectl installation guide](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/).
+The workshop pins Kubernetes v1.35.8; kubectl v1.35.8 matches the client bundled
+inside its image. Installing kubectl does not require an existing cluster.
+
+Check the prerequisites before continuing:
+
+```bash
+uname -sm
+git --version
+bash --version
+curl --version
+python3 --version
+docker info
+docker buildx version
+kubectl version --client
+```
+
+### 2. Download the simulator
+
+```bash
+git clone https://github.com/kirson-git/nico-simulator.git
 cd nico-simulator
+```
+
+If GitHub requests authentication, use an account with access to the repository.
+For an existing checkout, skip cloning and use [Update the simulator](#update-the-simulator).
+
+### 3. Build and start
+
+```bash
 ./workshop.sh --build
 ./workshop.sh --start
+./workshop.sh --status
 ```
 
-Open [http://localhost:8780](http://localhost:8780) on that machine.
-The launcher creates `kind-dpf-training`, starts the course container, and waits
-for the two training nodes to be ready.
+Wait for `Workshop ready: http://127.0.0.1:8780`. Status should show the course
+container running and both training nodes as `Ready`.
 
-### Open from your Mac
+The start command creates a dedicated two-node `kind-dpf-training` cluster and
+starts the course container. Lessons and prepared examples are already included.
 
-Run this in iTerm2 on your Mac and leave it running. Replace `nico-lab` with your
-SSH alias or `username@server` if needed.
+### 4. Open the course
+
+Open these links in a browser on the same Linux machine:
+
+| Lesson | Local address |
+| --- | --- |
+| Start with DPU 101 | [localhost:8780](http://localhost:8780/) |
+| DPU vs NIC mode | [/#modes](http://localhost:8780/#modes) |
+| OS first, then containers | [/#software](http://localhost:8780/#software) |
+| Kubernetes exercise | [/kubernetes](http://localhost:8780/kubernetes) |
+| DPU YAML walkthrough | [/dpu-config](http://localhost:8780/dpu-config) |
+| Host Ubuntu rehearsal | [/host-ubuntu](http://localhost:8780/host-ubuntu) |
+
+`localhost` means the computer running your browser. The `#software` part selects
+a lesson in the course; it is not a GitHub directory. Keep the Docker service
+running while using the simulator. Closing the setup terminal does not stop the
+containers.
+
+## NVIDIA Brev (planned)
+
+Brev will be an additional distribution option for the completed simulator.
+NVIDIA documents how to package code, an environment and compute settings into a
+shareable [Brev Launchable](https://docs.nvidia.com/brev/concepts/launchables).
+Start with the [NVIDIA Brev overview](https://docs.nvidia.com/brev/getting-started/overview)
+to learn about the platform.
+
+The proposed integration uses a Linux amd64 VM to build and start this workshop,
+including its dedicated kind cluster. A simulator Launchable has not been
+published or tested on Brev. The local application accepts only localhost
+origins; authenticated browser access through Brev must be implemented and
+verified before advertising that option as ready to use.
+
+Once validated, this section will include the actual **Launch on Brev** button
+and user instructions. Use the local Linux installation above for this release.
+
+## Update the simulator
+
+From your existing checkout, with no uncommitted local changes:
 
 ```bash
-ssh -N -o ExitOnForwardFailure=yes -L 8780:127.0.0.1:8780 nico-lab
+git pull --ff-only
+./workshop.sh --build
+./workshop.sh --start
+./workshop.sh --status
 ```
 
-Then open [http://localhost:8780](http://localhost:8780) in your Mac browser.
-If port 8780 is already in use on your Mac, forward another local port:
-
-```bash
-ssh -N -o ExitOnForwardFailure=yes -L 8781:127.0.0.1:8780 nico-lab
-```
-
-Open [http://localhost:8781](http://localhost:8781) instead. The launcher supports
-Linux amd64; native macOS/Apple Silicon startup is not implemented. A Mac can
-access the course through this tunnel to the Linux host.
+The course container is replaced. The owned training cluster and learner
+workspace are retained. Reload the browser to load updated lessons.
 
 ## Manage the workshop
 
@@ -92,6 +193,19 @@ Use one checkout per Docker host: the launcher uses fixed container, cluster,
 volume and port names. Keep `.runtime/` with the checkout when moving an existing
 local installation. A fresh clone refuses to take over an existing cluster whose
 identity it does not own. Never commit that runtime directory.
+
+## Troubleshooting
+
+| Symptom | What to check |
+| --- | --- |
+| Browser cannot open the course | Run `./workshop.sh --status` and `./workshop.sh --logs`. Open the browser on the machine running Docker. |
+| `Missing required tool` | Install the named host prerequisite, then run `--start` again. |
+| Docker permission denied | Check account access using `docker info` and the Docker post-installation guide above. |
+| `Run --build first` | Run `./workshop.sh --build` successfully before `--start`. |
+| Port 8780 already in use | Check `docker ps` and `ss -ltnp 'sport = :8780'`; stop the conflicting service only if it is yours. This launcher has no alternate-port flag. |
+| Training cluster identity does not match | Use the original checkout with its `.runtime/` ownership record. Do not delete or overwrite an unfamiliar cluster. |
+| `This release supports Linux amd64` | Use a Linux x86-64 machine; native macOS and ARM64 execution are not supported. |
+| A topic says **Planned** | That exercise is not implemented; use one of the available lesson links above. |
 
 ## Course authoring
 
@@ -140,8 +254,8 @@ See [the testing guide](user-documantion/testing.txt) for browser checks.
 ## Access and attribution
 
 The service binds to `127.0.0.1:8780` and accepts localhost browser origins.
-Use the SSH tunnel for remote access. It is a single-learner workshop with a real
-shell and no web login; keep it on loopback rather than exposing it publicly.
+It is a single-learner workshop with a real shell and no web login; keep it on
+loopback rather than exposing it publicly.
 Its container receives only the training kubeconfig, not the host Docker socket
 or your administration kubeconfig.
 
