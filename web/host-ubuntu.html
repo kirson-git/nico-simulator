@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Host Ubuntu installation · DPF Workshop</title><link rel="stylesheet" href="/dpu101.css"><link rel="stylesheet" href="/host-ubuntu.css"><script type="module" src="/host-ubuntu.js"></script><link rel="stylesheet" href="/course.css"><script type="module" src="/course-nav.js"></script></head>
+<body class="course-shell"><header><a class="brand" href="/">◈ <span>DPF <b>WORKSHOP</b></span></a><span class="badge">SIMULATION</span><a class="lab-link" href="/kubernetes">Kubernetes lab</a></header>
+<div class="course"><aside class="course-sidebar" data-course-nav></aside>
+<main><div class="chapter-meta"><span id="progress"></span><span>RECORDED EUROPE WORKFLOW · BROWSER REHEARSAL</span></div><details class="host-step-list"><summary>Installation steps</summary><nav id="steps" aria-label="Installation steps"></nav></details><h2 id="title"></h2><p class="lead" id="explanation"></p>
+<div class="diagram"><div class="diagram-label">TWO SEPARATE PATHS</div><div class="path"><div class="node">Administration machine<small>ISO + Autoinstall YAML</small></div><span class="arrow">→</span><div class="node">iDRAC virtual DVD<small>Out-of-band installation</small></div><span class="arrow">→</span><div class="node">Host Ubuntu<small>Installed on server RAID</small></div></div><p>Host data interfaces → BlueField DPU → network fabric</p><p class="small">The DPU has its own Arm OS. HBN will later control the configured data forwarding path; it does not carry this iDRAC ISO stream.</p></div>
+<details><summary>Inspect the prepared YAML and ISO files</summary><p>This shortened teaching YAML is not deployable. The physical lab guide contains the complete workflow and files.</p><pre id="yaml"></pre><pre>/autoinstall.yaml
+/europe/guard.py
+/europe/prepare-live.sh
+/europe/netplan.yaml
+/europe/authorized_keys
+/boot/grub/grub.cfg
+/md5sum.txt</pre></details>
+<h3>Associated command / request</h3><p class="small">Illustrative preview; buttons update only this browser simulation.</p><pre id="command"></pre><div class="switcher" id="actions"></div>
+<div id="faults" class="switcher"><button id="wrong-server">Try wrong server</button><button id="serial-mismatch">Try PERC serial mismatch</button><button id="recover">Apply guarded recovery</button><button id="correct-target">Select correct target</button></div>
+<h3>Simulated console</h3><p class="small">Teaching output reconstructed from the completed Europe installation and recovery. No live hardware status is shown.</p><pre id="console" role="log" aria-live="polite"></pre>
+<div class="switcher"><button id="check">Check my work</button><button id="reset">Reset lesson</button></div><div id="result" class="feedback" aria-live="polite">Complete the steps, then check your work.</div>
+<section id="handoff" hidden><h3>Next: configure the HBN data path</h3><p>The host OS and management path are ready. Host DPU-facing interfaces are still unconfigured; HBN is not deployed and data traffic has not been validated.</p><p>A later lesson will configure the host interfaces and HBN services, routes and tenant policies, then test permitted and blocked traffic. Only traffic deliberately routed through the DPU data path goes through HBN. The separate management/iDRAC connection remains separate.</p></section>
+<div class="sources">Official reading: <a href="https://canonical-subiquity.readthedocs-hosted.com/en/latest/tutorial/providing-autoinstall.html" target="_blank" rel="noopener noreferrer">Ubuntu Autoinstall</a> · <a href="https://www.dell.com/support/kbdoc/en-us/000124001/using-the-virtual-media-function-on-idrac-6-7-8-and-9" target="_blank" rel="noopener noreferrer">Dell virtual media</a> · <a href="https://networking-docs.nvidia.com/dpf/26.4.0/hbn-in-dpf-zero-trust" target="_blank" rel="noopener noreferrer">HBN with DPF</a></div>
+</main></div></body></html>

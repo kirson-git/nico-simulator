@@ -1,0 +1,40 @@
+# Europe only: DPU SIM00000001 / BMC 192.0.2.246.
+# Hardware has 16 GiB; administrator approved experimental provisioning.
+# Release the Europe maintenance hold explicitly after prerequisite checks.
+# BFB source: dpf-installation/lab/passthrough/10-bfb.yaml (repository root).
+# Flavor source: dpuflavor-europe-dns-ntp.yaml in this directory.
+# See EUROPE-YAML-GUIDE.txt for file roles and the post-install reboot gate.
+apiVersion: provisioning.dpu.nvidia.com/v1alpha1
+kind: DPUSet
+metadata:
+  name: passthrough-europe
+  namespace: dpf-operator-system
+spec:
+  strategy:
+    # Template changes do not automatically replace existing DPUs.
+    type: OnDelete
+  dpuNodeSelector:
+    # All three labels must match: select only the approved Europe node.
+    matchLabels:
+      feature.node.kubernetes.io/dpu-enabled: 'true'
+      training.dpf.nvidia.com/selected: 'true'
+      training.dpf.nvidia.com/tenant: europe
+  dpuTemplate:
+    spec:
+      dpuFlavor: passthrough-europe-dns-ntp-v1
+      bfb:
+        name: bf-bundle-v26.4.0
+      nodeEffect:
+        # Initial provisioning hold; already released for the October 5 retry.
+        # The later physical-host reboot acknowledgement is a separate step.
+        hold: true
+      cluster:
+        # Target the Europe DPUCluster by label, not by namespace alone.
+        selector:
+          matchLabels:
+            training.dpf.nvidia.com/tenant: europe
+  dpuDeviceSelector:
+    # Select the Europe card only, even if discovery finds other DPUs.
+    matchLabels:
+      provisioning.dpu.nvidia.com/dpudevice-bmc-ip: 192.0.2.246
+      provisioning.dpu.nvidia.com/dpunode-name: dpu-node-sim00000001

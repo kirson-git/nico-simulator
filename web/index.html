@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DPF Workshop · Your first tenant</title>
+  <link rel="stylesheet" href="/xterm.css"><link rel="stylesheet" href="/style.css">
+  <script defer src="/xterm.js"></script><script defer src="/fit.js"></script><script defer src="/app.js"></script>
+  <link rel="stylesheet" href="/course.css"><script type="module" src="/course-nav.js"></script>
+</head>
+<body class="course-shell terminal-course">
+  <header><a class="brand" href="/">◈ <span>DPF <b>WORKSHOP</b></span></a><span class="badge">KUBERNETES LAB · 0.1.0</span><a class="course-home" href="/">← DPU 101</a><span id="health" class="health">Connecting to Kubernetes…</span></header>
+  <div class="course"><aside class="course-sidebar" data-course-nav></aside><main>
+    <section class="lesson" aria-label="Guided lesson">
+      <div class="eyebrow">02 / KUBERNETES FOUNDATIONS <span>≈ 10 MIN</span></div>
+      <h1>Your first<br><em>tenant workspace.</em></h1>
+      <p class="intro">Meet the cluster, inspect a prepared manifest, and create a home for Europe. Every command in this lesson runs against real Kubernetes.</p>
+      <div class="diagram" aria-label="Browser terminal connects to the training cluster, which holds the Europe namespace and its ConfigMap">
+        <div class="diagram-top"><span>YOUR TERMINAL</span><span class="arrow">→</span><span>kind-dpf-training</span></div>
+        <div class="namespace"><small>NAMESPACE</small><strong>tenant-europe</strong><div class="resource">▤ &nbsp; ConfigMap <b>lab-identity</b></div></div>
+      </div>
+      <p class="note"><b>What is real?</b> Kubernetes, YAML, and the shell. This foundation lesson creates a namespace and a ConfigMap. DPF, Kamaji, tenant control planes, and simulated DPUs are later lessons. A namespace alone is not a DPF tenant cluster.</p>
+
+      <article><div class="step">1</div><h2>Meet your cluster</h2><p>A <b>node</b> runs Kubernetes components or workloads. This lab has one control-plane node and one worker, both running as Docker containers.</p><pre><code>kubectl get nodes</code></pre><button class="insert" data-command="kubectl get nodes">Insert into terminal ↗</button><p class="expected">Expect two nodes with status <b>Ready</b>.</p></article>
+
+      <article><div class="step">2</div><h2>Read the prepared YAML</h2><p>The simulator includes the complete manifest. A <b>namespace</b> groups resources. A <b>ConfigMap</b> stores non-secret settings. The file describes both, separated by <code>---</code>.</p><pre><code>cat /app/lessons/europe.yaml</code></pre><button class="insert" data-command="cat /app/lessons/europe.yaml">Insert into terminal ↗</button><p>The Europe settings are already filled in. No editing is needed.</p><details><summary>Explain the fields</summary><p><code>apiVersion</code> and <code>kind</code> identify the resource type. <code>metadata.name</code> names it. The label identifies Europe. <code>metadata.namespace</code> places the ConfigMap inside Europe, and <code>data</code> holds its settings.</p></details></article>
+
+      <article><div class="step">3</div><h2>Apply and inspect</h2><p><code>apply</code> asks Kubernetes to make the cluster match the bundled YAML. Applying the same file again reconciles the desired settings.</p><pre><code>kubectl apply -f /app/lessons/europe.yaml</code></pre><button class="insert" data-command="kubectl apply -f /app/lessons/europe.yaml">Insert into terminal ↗</button><pre><code>kubectl get configmap lab-identity -n tenant-europe -o yaml</code></pre><button class="insert" data-command="kubectl get configmap lab-identity -n tenant-europe -o yaml">Insert into terminal ↗</button><p class="expected">Expect <code>region: europe</code> and <code>environment: simulation</code>.</p></article>
+
+      <article><div class="step">4</div><h2>Check your work</h2><p>The checker reads the live namespace, its label, and the ConfigMap. It does not apply the solution for you.</p><div class="actions"><button id="check" class="primary">Check my work →</button><button id="reset" class="secondary">Reset lesson</button></div><div id="result" aria-live="polite">Ready when you are.</div><details><summary>Need a hint?</summary><p>If a check fails, apply the bundled file from step 3 again, then check. The expected values are already provided; no file editing is needed.</p></details><p class="note">Reset deletes <b>tenant-europe and everything inside it</b> and restores the prepared workspace YAML. Other training namespaces are kept.</p></article>
+      <footer>Next in the course: Asia, DPF architecture, and simulated DPU discovery.</footer>
+    </section>
+    <section class="terminal-pane" aria-label="Real Bash terminal">
+      <div class="terminal-header"><span><i></i> LIVE TERMINAL <small>bash / training cluster</small></span><button id="reconnect">Reconnect</button></div>
+      <div id="terminal"></div>
+      <div class="terminal-footer"><span id="connection">Opening shell…</span><span>Commands inserted above need Enter to run.</span></div>
+      <div class="terminal-tip"><b>Ready-to-use manifest</b><span><code>/app/lessons/europe.yaml</code> is bundled and complete.</span><span>Copy: select text, then ⌘C on Mac. Paste: ⌘V.</span></div>
+    </section>
+  </main></div>
+</body>
+</html>

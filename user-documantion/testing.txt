@@ -1,0 +1,28 @@
+SIMULATOR VERIFICATION
+
+From the repository root:
+
+  python3 bin/build-yaml-examples.py
+  git diff --exit-code -- web/yaml-examples.json
+  bash -n workshop.sh
+  ./workshop.sh --help
+  python3 -m unittest discover -s tests -p 'test_*.py'
+  ./workshop.sh --build
+  docker run --rm --entrypoint npm dpf-workshop:0.1.0 test
+
+BROWSER CHECKS (Linux Docker host, course already running on port 8780)
+
+These commands test the diagram and YAML pages without cluster writes. Other
+browser tests such as browser.mjs and live.test.mjs exercise real training state;
+read them before running. Do not run those against another learner's exercise.
+
+  mkdir -p .runtime/browser-checks
+  cp tests/guide-diagrams.mjs tests/config-browser.mjs .runtime/browser-checks/
+  docker run --rm --network host --ipc=host \
+    -v "$PWD/.runtime/browser-checks:/test" -w /test \
+    mcr.microsoft.com/playwright@sha256:6446946a1d9fd62d9ae501312a2d76a43ee688542b21622056a372959b65d63d \
+    bash -lc 'npm install --no-save playwright@1.58.2 && node guide-diagrams.mjs && node config-browser.mjs'
+
+The browser image/package combination is a pinned verification environment.
+Screenshots are written under .runtime/browser-checks/. Inspect them as well as
+reading the test output. They and downloaded packages must stay outside Git.

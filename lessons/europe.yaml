@@ -1,0 +1,17 @@
+# Prepared foundation lesson: inspect and apply; no editing required.
+# This is a real Kubernetes namespace and ConfigMap, not a DPF DPUCluster.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tenant-europe
+  labels:
+    workshop.dpf/tenant: europe
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lab-identity
+  namespace: tenant-europe
+data:
+  region: europe
+  environment: simulation

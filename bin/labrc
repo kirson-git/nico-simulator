@@ -1,0 +1,6 @@
+export PS1='\[\e[38;5;118m\]learner@dpf-training\[\e[0m\]:\w\$ '
+export HISTFILE=/workspace/.bash_history
+export HISTCONTROL=ignoreboth
+alias ll='ls -alh'
+printf '\nDPF Workshop 0.1.0 | real Kubernetes • training cluster\n'
+printf 'Start with: kubectl get nodes\nPrepared lesson: /app/lessons/europe.yaml (no editing needed)\n\n'

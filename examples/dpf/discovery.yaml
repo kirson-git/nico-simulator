@@ -1,0 +1,23 @@
+# Standalone DPF v26.4.0 lab; adapted from NVIDIA Zero Trust passthrough.
+---
+apiVersion: provisioning.dpu.nvidia.com/v1alpha1
+kind: DPUDiscovery
+metadata:
+  name: dpu-discovery-33
+  namespace: dpf-operator-system
+spec:
+  ipRangeSpec:
+    ipRange:
+      startIP: 192.0.2.246
+      endIP: 192.0.2.246
+---
+apiVersion: provisioning.dpu.nvidia.com/v1alpha1
+kind: DPUDiscovery
+metadata:
+  name: dpu-discovery-35
+  namespace: dpf-operator-system
+spec:
+  ipRangeSpec:
+    ipRange:
+      startIP: 192.0.2.249
+      endIP: 192.0.2.249

@@ -1,0 +1,31 @@
+import {chromium} from 'playwright';
+import assert from 'node:assert/strict';
+const browser = await chromium.launch({headless: true});
+const page = await browser.newPage({viewport: {width: 1440, height: 1000}});
+const errors=[];
+page.on('pageerror', error=>errors.push(error.message));
+page.on('dialog', dialog=>dialog.accept());
+await page.goto('http://127.0.0.1:8780/kubernetes');
+await page.waitForFunction(()=>document.querySelector('#connection').textContent.includes('Connected'));
+await page.waitForFunction(()=>document.querySelector('#health').textContent.includes('Ready'));
+assert.equal(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1), true, 'Desktop lesson and terminal must fit the viewport');
+await page.locator('#check').click();
+await page.waitForFunction(()=>document.querySelector('#result').textContent.includes('Keep going'));
+for (const command of ['kubectl get nodes', 'cat /app/lessons/europe.yaml', 'kubectl apply -f /app/lessons/europe.yaml']) {
+  await page.locator('[data-command]').evaluateAll((buttons, command)=>buttons.find(button=>button.dataset.command===command).click(),command);
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(800);
+}
+await page.locator('#check').click();
+await page.waitForFunction(()=>document.querySelector('#result').textContent.includes('Lesson complete'));
+assert.equal(await page.locator('#result li.pass').count(),4);
+await page.screenshot({path:'/test/lesson-complete.png'});
+await page.locator('#reset').click();
+await page.waitForFunction(()=>document.querySelector('#result').textContent.includes('Ready to retry'), {timeout:45000});
+await page.locator('#check').click();
+await page.waitForFunction(()=>document.querySelector('#result').textContent.includes('Keep going'));
+await page.evaluate(()=>document.querySelector('.lesson').scrollTop=0);
+await page.screenshot({path:'/test/tutorial.png'});
+assert.deepEqual(errors,[]);
+console.log('BROWSER PASS: rendered tutorial, connected terminal, inserted commands, failed then passed grading, reset, no JS errors.');
+await browser.close();

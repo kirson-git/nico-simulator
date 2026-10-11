@@ -1,0 +1,32 @@
+SIMULATOR REPOSITORY MIGRATION — 2026-10-11
+
+Goal: Publish the existing course to kirson-git/nico-simulator with a useful README.
+Scope: simulator source, exact course assets, sanitized YAMLs and authoring skill.
+The original installer, private lab guide, credentials and runtime logs stay local.
+
+Plan:
+1. Clone the empty repository over SSH and copy allowlisted simulator sources.
+2. Make YAML generation self-contained; preserve historical source provenance.
+3. Document startup, course boundaries, Mac tunnel and authoring conventions.
+4. Verify generation, shell lifecycle, unit tests, Docker build and browser lessons.
+5. Install checkout at /images/nico-simulator; preserve local training ownership.
+6. Commit and push main over SSH; verify the remote commit.
+
+Review focus:
+- Generated YAMLs must exactly preserve the existing sanitized course content.
+- No dependency on the old checkout for builds or YAML generation.
+- No credentials, local kubeconfig, runtime state or private lab guide in Git.
+- The existing training cluster and learner volumes must survive migration.
+- README flags/platform claims must match the launcher and exercised output.
+
+Verification completed:
+- SSH clone authenticated; destination repository was empty.
+- Docker build succeeded using only the standalone checkout.
+- 7/7 Node unit tests and 3/3 mocked launcher lifecycle tests passed.
+- Shell syntax/help, Markdown lint and skill validation passed.
+- Browser diagrams and eight-YAML guide checks passed, including mobile layout.
+- Eight YAML bodies/source metadata and three original PNGs preserved exactly.
+- Independent read-only review: no material findings.
+- Private runtime copied locally; training cluster identity preserved.
+- Course restarted successfully; both existing training nodes Ready.
+- Original simulator folder retained with MIGRATED-TO.txt redirect.

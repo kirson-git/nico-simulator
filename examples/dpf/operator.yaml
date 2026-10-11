@@ -1,0 +1,20 @@
+# Standalone DPF v26.4.0 lab; adapted from NVIDIA Zero Trust passthrough.
+---
+apiVersion: operator.dpu.nvidia.com/v1alpha1
+kind: DPFOperatorConfig
+metadata:
+  name: dpfoperatorconfig
+  namespace: dpf-operator-system
+spec:
+  overrides:
+    kubernetesAPIServerVIP: 198.51.100.20
+    kubernetesAPIServerPort: 6443
+  dpuDetector:
+    disable: true
+  provisioningController:
+    dmsTimeout: 900
+    installInterface:
+      installViaRedfish:
+        skipDPUNodeDiscovery: false
+  kamajiClusterManager:
+    disable: false

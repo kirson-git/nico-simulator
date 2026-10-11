@@ -1,0 +1,169 @@
+:root { color-scheme: dark; --bg: #0c1016; --panel: #141d26; --line: #2a3641; --muted: #a5b6c8; --green: #b0ed68; --blue: #92c7f8; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: #e6edf5; font: 15px/1.7 system-ui, sans-serif; }
+header { min-height: 74px; padding: 16px 32px; display: flex; align-items: center; gap: 24px; border-bottom: 1px solid var(--line); }
+a { color: var(--green); text-underline-offset: 4px; }
+.brand { display: flex; align-items: center; gap: 12px; font-size: 27px; text-decoration: none; }
+.brand span { font-size: 19px; letter-spacing: 1px; color: #e6edf5; }
+.brand b { color: var(--muted); font-weight: 400; }
+.badge { font-size: 10px; letter-spacing: 1px; border: 1px solid #425c32; border-radius: 5px; padding: 3px 9px; color: var(--green); }
+.lab-link { margin-left: auto; font-size: 13px; }
+.course { display: grid; grid-template-columns: 270px minmax(0, 1fr); max-width: 1560px; margin: auto; }
+aside { padding: 34px 24px; border-right: 1px solid var(--line); }
+.eyebrow, .chapter-meta { font-size: 10px; letter-spacing: 1.4px; color: var(--muted); }
+.eyebrow { color: var(--green); }
+h1 { font-size: 38px; margin: 10px 0; letter-spacing: -1px; line-height: 1.2; }
+.intro { color: var(--muted); font-size: 14px; }
+nav { display: grid; gap: 8px; margin-top: 30px; }
+button { font: inherit; cursor: pointer; color: #d9e3ee; background: #17212b; border: 1px solid var(--line); border-radius: 7px; padding: 10px 14px; }
+button:hover { border-color: #68884a; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+nav button { text-align: left; font-size: 12px; background: transparent; padding: 13px 11px; }
+nav button[aria-current="step"], button[aria-pressed="true"] { background: #233020; border-color: #637c43; color: var(--green); }
+.course-note { margin-top: 32px; border-top: 1px solid var(--line); padding-top: 20px; font-size: 12px; color: var(--muted); }
+.course-note b { color: #cbd8e4; }
+main { min-width: 0; padding: 32px 42px; }
+.chapter-meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+h2 { font-size: clamp(29px, 3vw, 42px); letter-spacing: -1.2px; line-height: 1.2; margin: 27px 0 19px; }
+h3 { margin-top: 24px; font-size: 19px; }
+p { color: #bac9d9; }
+.lead { font-size: 18px; max-width: 790px; }
+.lead b, strong { color: #e4efda; }
+.callout { border-left: 3px solid var(--green); background: #18231f; padding: 14px 18px; border-radius: 0 7px 7px 0; margin: 24px 0; color: #c7dbbc; }
+.small, .sources { font-size: 12px; color: var(--muted); }
+.sources { border-top: 1px solid var(--line); margin-top: 26px; padding-top: 15px; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 24px 0; }
+.card { border: 1px solid var(--line); background: var(--panel); border-radius: 10px; padding: 20px; }
+.card h3 { margin: 0 0 9px; }
+.card p { margin-bottom: 0; font-size: 14px; }
+.diagram { background: linear-gradient(125deg,#152321,#141d2d); padding: 25px; border: 1px solid #3a5142; border-radius: 12px; margin: 25px 0; }
+.diagram-label { color: var(--green); font-size: 10px; letter-spacing: 1.5px; margin-bottom: 16px; }
+.path { display: flex; align-items: center; gap: 14px; justify-content: space-between; }
+.node { text-align: center; border: 1px solid #536c52; border-radius: 7px; background: #101a1f; padding: 18px; flex: 1; }
+.node small { display: block; color: var(--muted); font-size: 11px; margin-top: 4px; }
+.arrow { color: var(--green); font-size: 23px; }
+.chip-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; }
+.chip-grid button { min-height: 82px; background: #15241f; }
+.detail { min-height: 110px; background: #111a23; border: 1px solid var(--line); border-radius: 8px; padding: 17px 20px; margin-top: 16px; }
+.detail p { margin: 0; }
+.switcher { display: flex; flex-wrap: wrap; gap: 9px; margin: 22px 0 16px; }
+.tenant-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; margin-bottom: 16px; }
+.tenant-grid .node:nth-child(2) { border-color: #597eaf; }
+.tenant-grid .node:nth-child(2) b { color: var(--blue); }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px; }
+th, td { border-bottom: 1px solid var(--line); padding: 13px; text-align: left; vertical-align: top; }
+th { color: var(--green); background: #18231f; font-weight: 500; }
+td { color: #becddd; }
+code { color: #c9e7ae; font-size: .9em; overflow-wrap: anywhere; }
+fieldset { border: 1px solid var(--line); border-radius: 8px; margin: 20px 0; padding: 18px; }
+legend { padding: 0 8px; font-weight: 600; }
+fieldset label { display: block; padding: 6px 0; cursor: pointer; color: #bdccdc; }
+input { accent-color: var(--green); margin-right: 9px; }
+.feedback { margin: 18px 0; border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
+.pass { color: var(--green); }.retry { color: #ffd299; }
+.primary { background: var(--green); color: #152111; font-weight: 600; border-color: var(--green); }
+.chapter-controls { display: flex; justify-content: space-between; margin: 32px 0 10px; gap: 16px; border-top: 1px solid var(--line); padding-top: 24px; }
+button:disabled { opacity: .35; cursor: default; }
+@media(max-width: 1050px) { .course { grid-template-columns: 235px minmax(0,1fr); } main { padding: 28px; } .cards { grid-template-columns: 1fr; } }
+@media(max-width: 800px) {
+  header { padding: 14px 20px; gap: 12px; }.badge { display: none; }.brand span { font-size: 15px; }.lab-link { font-size: 12px; }
+  .course { display: block; } aside { padding: 22px; border-right: 0; border-bottom: 1px solid var(--line); } aside h1 { font-size: 30px; }
+  nav { grid-template-columns: repeat(2,minmax(0,1fr)); margin-top: 18px; }.course-note { display: none; } main { padding: 24px; }
+  .chip-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }.path { flex-direction: column; }.node { width: 100%; }.path .arrow { transform: rotate(90deg); }
+  .tenant-grid { grid-template-columns: 1fr; } .diagram { padding: 18px; }
+}
+
+/* DPU 101: large, labeled blocks; the host-install lesson keeps its own layout. */
+.dpu-intro { font-size: 16px; line-height: 1.6; }
+.dpu-intro .diagram-label { font-size: 11px; letter-spacing: 1px; }
+.dpu-intro nav button { font-size: 14px; }
+.dpu-intro .sources { font-size: 13px; }
+.dpu-intro details { border-top: 1px solid var(--line); padding: 16px 0; }
+.dpu-intro summary { cursor: pointer; color: var(--blue); font-size: 15px; }
+.system-diagram { margin: 24px 0; }
+.system-layout { display: grid; grid-template-columns: minmax(0,1fr) 64px 108px; align-items: center; }
+.server-chassis { border: 1px solid #586a7c; border-radius: 10px; padding: 16px; background: #0e171f; }
+.chassis-label { font-size: 12px; letter-spacing: 1px; color: #b9c9d9; margin-bottom: 12px; }
+.server-parts { display: grid; grid-template-columns: minmax(0,1fr) 52px minmax(0,1fr); align-items: center; }
+.machine { padding: 16px 12px; border: 1px solid #547ba4; border-radius: 8px; min-width: 0; text-align: center; }
+.machine h3 { font-size: 19px; margin: 0 0 16px; }
+.machine p { font-size: 13px; margin: 12px 0 0; }
+.dpu-machine { border: 2px solid #8abf54; background: #19261e; }
+.software-layer { font-size: 14px; border: 1px solid #38505d; background: #182837; border-radius: 5px; margin-top: 8px; padding: 10px 6px; }
+.os-layer { font-weight: 600; color: #c6e6ff; }
+.os-layer small { display: block; font-size: 13px; font-weight: 400; }
+.dpu-machine .software-layer { background: #223420; border-color: #48653a; }
+.dpu-machine .os-layer { color: #d0f3ad; }
+.engine { font-size: 13px; border-top: 1px solid #48653a; margin-top: 14px; padding-top: 12px; }
+.connection { text-align: center; color: var(--muted); font-size: 11px; }
+.connection span { display: block; color: var(--green); font-size: 27px; }
+.network-end { text-align: center; padding: 16px 8px; border: 1px solid #547ba4; border-radius: 8px; background: #172638; }
+.network-end small { display: block; font-size: 13px; color: #b7cbde; margin-top: 10px; }
+.board { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.board button { min-height: 100px; text-align: left; padding: 18px; }
+.part-number { display: block; color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+.board strong { font-size: 20px; }
+.dpu-intro .detail { min-height: 104px; font-size: 17px; }
+.dpu-intro .detail p { margin-top: 8px; }
+.mode-path .node { font-size: 18px; }
+.mode-path .node small { font-size: 14px; }
+#mode-owner { font-size: 22px; color: var(--green); }
+.install-flow { list-style: none; padding: 0; display: grid; gap: 14px; }
+.install-flow li { display: flex; gap: 18px; padding: 20px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+.flow-number { flex: 0 0 36px; height: 36px; text-align: center; line-height: 36px; border-radius: 50%; background: #283d25; color: var(--green); font-weight: 700; }
+.install-flow h3 { margin: 0 0 6px; }
+.install-flow p { margin: 0; }
+.next-lesson { margin-top: 24px; padding: 20px; border: 1px solid #4e693d; border-radius: 10px; background: #17251d; }
+.next-lesson h3 { margin: 0; }
+.next-link { font-weight: 600; }
+@media(max-width: 1200px) {
+  .system-layout { grid-template-columns: 1fr; gap: 12px; }
+  .network-connection { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .network-connection span { transform: rotate(90deg); }
+  .network-end small { margin-top: 4px; }
+}
+@media(max-width: 600px) {
+  .dpu-intro header { flex-wrap: wrap; gap: 6px 16px; }
+  .dpu-intro .lab-link { margin-left: 0; }
+  .server-parts { grid-template-columns: 1fr; gap: 8px; }
+  .server-parts .connection { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .server-parts .connection span { transform: rotate(90deg); }
+  .system-diagram { padding: 16px; }.server-chassis { padding: 12px; }
+  .board { grid-template-columns: 1fr; gap: 10px; }.board button { min-height: 70px; }
+  .install-flow li { gap: 12px; padding: 16px; }
+  .dpu-intro .chapter-meta { font-size: 11px; letter-spacing: .5px; }
+}
+
+/* Presentation-inspired anatomy, ownership and software-stack diagrams. */
+.machine h3 small { display: block; margin-top: 4px; color: var(--muted); font-size: 13px; font-weight: 400; }
+.control-pair { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.control-box { border: 1px solid var(--line); background: #101a1f; border-radius: 8px; padding: 16px; }
+.control-box b { display: block; font-size: 19px; }
+.control-box small { display: block; margin-top: 6px; color: var(--muted); font-size: 14px; }
+.control-box[data-active="true"] { border: 2px solid var(--green); background: #233020; }
+.control-box[data-active="false"] { border-style: dashed; }
+.packet-label { margin-top: 26px; }
+.hbn-example { display: flex; align-items: center; margin-top: 20px; cursor: pointer; gap: 8px; }
+.hbn-example input { width: 18px; height: 18px; flex: 0 0 18px; }
+.software-layout { display: grid; grid-template-columns: minmax(0,1fr) 80px minmax(0,1.7fr); align-items: center; }
+.bundle-box { padding: 24px; border: 1px solid #779065; border-radius: 10px; text-align: center; background: #15241c; }
+.bundle-box h3 { margin: 6px 0; font-size: 26px; color: var(--green); }
+.bundle-box p { font-size: 17px; }.bundle-box small { font-size: 13px; color: var(--muted); }
+.runtime-stack { display: grid; gap: 8px; }
+.runtime-stack > div { padding: 18px; border-radius: 8px; }
+.runtime-stack h3 { margin: 4px 0; font-size: 22px; }.runtime-stack p { margin: 0; font-size: 15px; }
+.runtime-service { border: 2px dashed #7dba48; background: #243320; }
+.runtime-os { border: 1px solid #547ba4; background: #172638; }
+.runtime-hardware { border: 1px solid var(--line); background: #101a1f; text-align: center; font-size: 15px; }
+@media(max-width: 1050px) {
+  .software-layout { grid-template-columns: 1fr; gap: 12px; }
+  .software-layout .connection { display: flex; align-items: center; justify-content: center; gap: 12px; }
+  .software-layout .connection span { transform: rotate(90deg); }
+}
+@media(max-width: 600px) {
+  .control-pair { grid-template-columns: 1fr; }
+  .hbn-example { align-items: flex-start; }
+  .dpu-intro .board { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .dpu-intro .board button { padding: 12px; }.dpu-intro .board strong { font-size: 16px; }
+}

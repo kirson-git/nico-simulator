@@ -1,0 +1,42 @@
+{
+  "operator": {
+    "file": "operator.yaml",
+    "originalSource": "dpf-installation/lab/zero-trust/10-operatorconfig.yaml",
+    "originalSha256": "df6ac4cf0fcc9a4a276c19e02c6ce995ab64a8d31aa85043037ed129e86cb6ec"
+  },
+  "discovery": {
+    "file": "discovery.yaml",
+    "originalSource": "dpf-installation/lab/zero-trust/30-discovery.yaml",
+    "originalSha256": "a14a0dddd66138be6e8343bb87f97ee3b9a8797fdf0b07dc00d211406f4f2900"
+  },
+  "europe": {
+    "file": "europe.yaml",
+    "originalSource": "user-documantion/tenants/tenant-europe.yaml",
+    "originalSha256": "783ce6dbd54ac4d563134b282ec5364d7a18597c8b792beec2743bf95911c1d0"
+  },
+  "asia": {
+    "file": "asia.yaml",
+    "originalSource": "user-documantion/tenants/tenant-asia.yaml",
+    "originalSha256": "2f90854d6dc8407809c6026c2b2c29ee734348a5ddfcb367b14285c3cfe5550e"
+  },
+  "bfb": {
+    "file": "bfb.yaml",
+    "originalSource": "dpf-installation/lab/passthrough/10-bfb.yaml",
+    "originalSha256": "49371f41005134679eae4c9ec00a972436efe88be8e41b8bd62cfa48b7961af7"
+  },
+  "flavor": {
+    "file": "flavor.yaml",
+    "originalSource": "user-documantion/tenants/dpuflavor-europe-dns-ntp.yaml",
+    "originalSha256": "58f2b72b936b435f3ca5af8b94da62dedfe30c1b3847c290800dc3e592e327c0"
+  },
+  "networking": {
+    "file": "networking.yaml",
+    "originalSource": "user-documantion/tenants/networking-europe.yaml",
+    "originalSha256": "d0c5c98b8dfb25d5ea227468b62a82a2d0e543a41c8ad0358ffad69217944543"
+  },
+  "dpuset": {
+    "file": "dpuset.yaml",
+    "originalSource": "user-documantion/tenants/provisioning-europe-held.yaml",
+    "originalSha256": "a8707e093839e6c3fa956389e0d2f951b65e931779aa87856d54945e337f08a5"
+  }
+}

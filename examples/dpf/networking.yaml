@@ -1,0 +1,112 @@
+# NVIDIA v26.4.0 passthrough configuration scoped to the Europe tenant.
+apiVersion: svc.dpu.nvidia.com/v1alpha1
+kind: DPUServiceInterface
+metadata:
+  name: europe-p0
+  namespace: dpf-operator-system
+spec:
+  template:
+    spec:
+      template:
+        metadata:
+          labels:
+            interface: p0
+        spec:
+          interfaceType: physical
+          physical:
+            interfaceName: p0
+  clusterSelector:
+    matchLabels:
+      training.dpf.nvidia.com/tenant: europe
+---
+apiVersion: svc.dpu.nvidia.com/v1alpha1
+kind: DPUServiceInterface
+metadata:
+  name: europe-p1
+  namespace: dpf-operator-system
+spec:
+  template:
+    spec:
+      template:
+        metadata:
+          labels:
+            interface: p1
+        spec:
+          interfaceType: physical
+          physical:
+            interfaceName: p1
+  clusterSelector:
+    matchLabels:
+      training.dpf.nvidia.com/tenant: europe
+---
+apiVersion: svc.dpu.nvidia.com/v1alpha1
+kind: DPUServiceInterface
+metadata:
+  name: europe-pf0hpf
+  namespace: dpf-operator-system
+spec:
+  template:
+    spec:
+      template:
+        metadata:
+          labels:
+            interface: pf0hpf
+        spec:
+          interfaceType: pf
+          pf:
+            pfID: 0
+  clusterSelector:
+    matchLabels:
+      training.dpf.nvidia.com/tenant: europe
+---
+apiVersion: svc.dpu.nvidia.com/v1alpha1
+kind: DPUServiceInterface
+metadata:
+  name: europe-pf1hpf
+  namespace: dpf-operator-system
+spec:
+  template:
+    spec:
+      template:
+        metadata:
+          labels:
+            interface: pf1hpf
+        spec:
+          interfaceType: pf
+          pf:
+            pfID: 1
+  clusterSelector:
+    matchLabels:
+      training.dpf.nvidia.com/tenant: europe
+---
+apiVersion: svc.dpu.nvidia.com/v1alpha1
+kind: DPUServiceChain
+metadata:
+  name: europe-passthrough
+  namespace: dpf-operator-system
+spec:
+  template:
+    spec:
+      template:
+        spec:
+          switches:
+          - ports:
+            - serviceInterface:
+                matchLabels:
+                  interface: p0
+            - serviceInterface:
+                matchLabels:
+                  interface: pf0hpf
+            # Explicitly preserve the applied lab service MTU.
+            serviceMTU: 1500
+          - ports:
+            - serviceInterface:
+                matchLabels:
+                  interface: p1
+            - serviceInterface:
+                matchLabels:
+                  interface: pf1hpf
+            serviceMTU: 1500
+  clusterSelector:
+    matchLabels:
+      training.dpf.nvidia.com/tenant: europe

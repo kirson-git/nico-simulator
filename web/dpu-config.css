@@ -1,0 +1,28 @@
+.config-course h1 { margin-top: 18px; font-size: clamp(32px,3vw,46px); }
+.sample-note { font-size: 13px; max-width: 950px; }
+#yaml-files { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 8px; margin: 24px 0; }
+#yaml-files a { border: 1px solid var(--line); border-radius: 5px; padding: 10px; text-decoration: none; font-size: 13px; color: #c2cdb8; }
+#yaml-files a[aria-current] { border-color: #76b900; background: #243513; color: #d5f6a7; }
+#yaml-lesson h2 { font-size: clamp(26px,2.3vw,36px); border-top: 1px solid #426116; padding-top: 25px; }
+#yaml-lesson h2:focus { outline: none; }
+.impact-map { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; margin: 20px 0; }
+.impact-target { border: 1px solid var(--line); padding: 12px 14px; border-radius: 6px; font-size: 14px; background: #10160c; }
+.impact-target small { display: block; color: var(--muted); font-size: 11px; }
+.impact-target[data-active=true] { border-color: #96d52e; background: #263b11; box-shadow: inset 4px 0 #96d52e; }
+.yaml-grid { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: 22px; align-items: start; }
+.yaml-panel,.yaml-explanation { min-width: 0; }
+.yaml-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.yaml-toolbar h3 { margin: 16px 0; }.yaml-toolbar button { font-size: 12px; padding: 6px 10px; }
+.copy-status { font-size: 12px; margin: 0; }
+.yaml-panel pre { margin: 0; overflow: auto; max-height: 680px; border: 1px solid #3c4930; background: #0c1009; padding: 14px 0; border-radius: 8px; position: relative; }
+#yaml-code { display: block; width: max-content; min-width: 100%; font: 12px/1.8 ui-monospace,monospace; color: #d8e3cd; position: relative; }
+.yaml-line { display: block; padding-right: 18px; white-space: pre; height: 1.8em; }
+.line-number { display: inline-block; width: 42px; padding-right: 12px; text-align: right; color: #708261; user-select: none; }
+.selected-line { background: #2a3d14; box-shadow: inset 3px 0 #96d52e; }
+.yaml-explanation h3 { margin-top: 16px; }
+.field-buttons { display: grid; gap: 7px; }.field-buttons button { text-align: left; font-size: 13px; padding: 9px 12px; }
+.field-detail { background: #1b2712; border-left: 3px solid #76b900; padding: 16px; margin-top: 16px; overflow-wrap: anywhere; }
+.field-detail h4 { margin: 0 0 10px; }.field-detail p { margin: 0; font-size: 14px; }
+.yaml-provenance { margin-top: 24px; font-size: 12px; overflow-wrap: anywhere; }.yaml-provenance summary { cursor: pointer; color: #bcd699; }
+@media(max-width:1100px) { .yaml-grid { grid-template-columns: minmax(0,1fr); }.yaml-explanation { grid-row: 1; }.yaml-panel pre { max-height: 480px; } }
+@media(max-width:600px) { #yaml-files { grid-template-columns: repeat(2,minmax(0,1fr)); }.impact-map { grid-template-columns: repeat(2,minmax(0,1fr)); }.impact-target { padding: 10px; font-size: 12px; } }

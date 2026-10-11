@@ -1,0 +1,189 @@
+/* Palette and bundled typography adapted from the supplied NICo Part 1 deck. */
+@font-face { font-family: 'NVIDIA Course'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/nvidia-sans-regular.woff2') format('woff2'); }
+@font-face { font-family: 'NVIDIA Course'; font-style: normal; font-weight: 700; font-display: swap; src: url('/fonts/nvidia-sans-bold.woff2') format('woff2'); }
+:root { --bg: #090b08; --panel: #141811; --line: #30392a; --muted: #a6b09e; --text: #f2f4ef; --green: #96d52e; --blue: #c4d8b2; }
+.course-shell { background: var(--bg); color: var(--text); font-family: 'NVIDIA Course', system-ui, sans-serif; line-height: 1.55; }
+.course-shell > header { height: 64px; min-height: 64px; padding: 0 28px; position: sticky; top: 0; z-index: 5; background: #0c0f09; }
+.course-shell .brand span { color: var(--text); }.course-shell .brand { color: #76b900; }
+.course-shell .course { max-width: none; display: grid; grid-template-columns: 280px minmax(0,1fr); align-items: start; }
+.course-shell .course-sidebar { position: sticky; top: 64px; height: calc(100dvh - 64px); padding: 0; overflow-y: auto; background: #10130e; border-right: 1px solid var(--line); z-index: 4; }
+.course-shell #course-menu { margin: 0; padding: 0; border: 0; font-size: 14px; }
+.course-shell #course-menu > summary { padding: 20px 22px 10px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: 1.8px; list-style: none; cursor: default; pointer-events: none; }
+#course-menu > summary::-webkit-details-marker { display: none; }
+#course-menu .menu-hint { display: none; }
+.catalog-body { padding: 0 14px 24px; }
+.catalog-title { padding: 5px 8px 0; font-size: 24px; font-weight: 700; color: var(--text); }
+.catalog-intro { padding: 0 8px; margin: 5px 0 24px; font-size: 13px; color: var(--muted); }
+.topic-heading { display: flex; gap: 10px; align-items: center; padding: 0 10px 10px; color: var(--text); }
+.topic-heading > span { color: var(--green); font-size: 12px; }.topic-heading small { margin-left: auto; font-size: 11px; color: var(--muted); }
+.course-shell #chapters { margin: 0 0 14px; display: grid; grid-template-columns: 1fr; gap: 3px; }
+#chapters a { display: flex; align-items: center; gap: 10px; color: #bac3b3; text-decoration: none; padding: 10px 12px; font-size: 14px; border: 1px solid transparent; border-radius: 5px; }
+.topic-dot { width: 5px; height: 5px; flex: 0 0 5px; border-radius: 50%; background: #647056; }
+#chapters a[aria-current="page"] { color: #d3f39f; background: #203014; border-color: #47651e; }
+#chapters a[aria-current="page"] .topic-dot { background: #96d52e; }
+.course-shell .course-topics { display: grid; grid-template-columns: 1fr; gap: 0; margin: 0; border-top: 1px solid var(--line); }
+.course-topics > a, .planned-topic { display: flex; align-items: flex-start; gap: 10px; padding: 12px 10px; border-bottom: 1px solid #252d20; text-decoration: none; font-size: 14px; color: #d5ddce; }
+.course-topics small { display: block; font-size: 10px; color: var(--muted); margin-top: 3px; letter-spacing: .4px; }
+.topic-number { font-size: 11px; padding-top: 3px; color: #9ab578; }.planned-topic { color: #949d8c; }
+.course-topics a[aria-current="page"] { color: var(--green); background: #203014; border-left: 3px solid #76b900; }
+#chapters a:hover, .course-topics a:hover { background: #1c2416; color: #e2f1d4; }
+.catalog-note { font-size: 11px; line-height: 1.6; padding: 12px 10px 0; color: var(--muted); }
+.course-shell main { min-width: 0; }
+.course-shell:not(.terminal-course) main { padding: 32px clamp(24px,3vw,54px); max-width: 1420px; width: 100%; margin: 0 auto; }
+.course-shell h2 { font-weight: 700; letter-spacing: -1px; }
+.course-shell #chapter > h2 { font-size: clamp(30px,3vw,48px); padding-bottom: 22px; border-bottom: 1px solid #426116; }
+.course-shell #chapter > h2:focus { outline: none; }
+.course-shell p { color: #bac3b3; }.course-shell .lead { font-size: 20px; max-width: 900px; }
+.course-shell .diagram { background: #11160e; border: 1px solid #435133; border-radius: 10px; }
+.course-shell .diagram-label { color: #a4c77a; font-size: 11px; }
+.course-shell .server-chassis { background: #0d110a; border-color: #627153; }
+.course-shell .chassis-label { color: #bcc6b1; }
+.course-shell .machine { background: #141910; border-color: #455336; }
+.course-shell .dpu-machine { border-color: #76b900; background: #18220e; }
+.course-shell .software-layer { background: #1e2818; border-color: #3c4a30; color: #e1ead8; }
+.course-shell .os-layer, .course-shell .dpu-machine .os-layer { color: #d0e9af; }
+.course-shell .network-end { background: #192112; border-color: #586e3f; }
+.course-shell .network-end small { color: #b6c4a8; }
+.course-shell .control-box, .course-shell .node, .course-shell .detail { background: #10160c; border-color: #34442a; }
+.course-shell .control-box[data-active="true"] { background: #223216; border-color: #76b900; }
+.course-shell .callout { background: #1b2712; color: #d2e2be; border-color: #76b900; }
+.course-shell button { background: #182011; color: #dce5d2; border-color: #374829; }
+.course-shell button.primary { background: #76b900; color: #0c1304; border-color: #76b900; }
+.course-shell button[aria-pressed="true"] { background: #263b11; border-color: #76b900; color: #d0ef9e; }
+.course-shell .runtime-os { background: #1b2813; border-color: #567539; }
+.course-shell .runtime-service { background: #253718; border-color: #76b900; }
+.course-shell .runtime-hardware, .course-shell .bundle-box { background: #151c0f; border-color: #435334; }
+.course-shell .next-lesson { background: #192311; border-color: #486528; }
+.course-shell .sources { font-size: 12px; }
+.course-shell .board { grid-template-columns: repeat(3,minmax(0,1fr)); }
+.course-shell .chapter-controls { margin-bottom: 20px; }
+.host-step-list { margin: 18px 0; }.host-step-list #steps { font-size: 13px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+.terminal-course .course { height: calc(100dvh - 64px); align-items: stretch; }
+.terminal-course main { height: 100%; grid-template-columns: minmax(0,.95fr) minmax(0,1.05fr); }
+.terminal-course .lesson { padding: 26px; }.terminal-course .terminal-pane { padding: 18px; background: #0c1009; }
+.terminal-course pre, .terminal-course #result { background: #11160e; }
+.terminal-course .resource { background: #27351c; }
+@media(max-width: 1250px) {
+ .course-shell .course { grid-template-columns: 250px minmax(0,1fr); }
+ .course-shell .board { grid-template-columns: repeat(2,minmax(0,1fr)); }
+ .course-shell .system-layout, .course-shell .software-layout { grid-template-columns: 1fr; gap: 14px; }
+ .course-shell .network-connection, .course-shell .software-layout .connection { display: flex; justify-content: center; align-items: center; gap: 12px; }
+ .course-shell .network-connection span, .course-shell .software-layout .connection span { transform: rotate(90deg); }
+}
+@media(max-width: 1200px) {
+ .terminal-course main { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(0,.65fr) minmax(0,1fr); }
+ .terminal-course .terminal-tip { display: none; }.terminal-course .terminal-pane { padding: 10px; }
+ .terminal-course .terminal-footer { font-size: 9px; }
+}
+@media(max-width: 760px) {
+ .course-shell > header { padding: 0 16px; gap: 12px; }.course-shell header .lab-link, .course-shell header .course-home { display: none; }
+ .course-shell .course { display: block; }
+ .course-shell .course-sidebar { height: 44px; width: 100%; top: 64px; overflow: visible; border-bottom: 1px solid var(--line); }
+ .course-shell #course-menu > summary { height: 44px; padding: 12px 18px; display: flex; justify-content: space-between; cursor: pointer; pointer-events: auto; }
+ #course-menu .menu-hint { display: inline; letter-spacing: 0; }
+ #course-menu[open] .catalog-body { max-height: calc(100dvh - 108px); overflow-y: auto; position: absolute; top: 44px; left: 0; right: 0; background: #10130e; border-bottom: 1px solid #607847; box-shadow: 0 20px 35px #000b; }
+ .course-shell:not(.terminal-course) main { padding: 24px 18px; }
+ .course-shell .lead { font-size: 18px; }.course-shell .board { gap: 10px; }
+ .course-shell .board button { padding: 12px; min-height: 80px; }.course-shell .board strong { font-size: 17px; }
+ .terminal-course .course { height: calc(100dvh - 64px); }
+ .terminal-course main { height: calc(100% - 44px); }
+ .host-step-list #steps { grid-template-columns: 1fr; }
+}
+.packet-track { --packet-step: 0; position: relative; height: 84px; margin: 10px 0; }
+.packet-wire { position: absolute; height: 3px; background: #455936; top: 43px; left: 16.666%; right: 16.666%; }
+.packet-token-wrap { width: 33.333%; position: absolute; left: calc(var(--packet-step) * 33.333%); top: 16px; display: flex; justify-content: center; transition: left .7s ease-in-out; }
+.packet-token { display: flex; flex-direction: column; align-items: stretch; text-align: center; font: 700 12px/1.4 ui-monospace, monospace; color: #10180a; box-shadow: 0 0 18px #76b90022; }
+.packet-token > span { padding: 6px 10px; background: #d0ddc3; border-radius: 4px; }
+.packet-token #packet-wrapper { background: #96d52e; }
+.packet-token #packet-wrapper[hidden] { display: none; }
+.mode-path [data-current="true"] { border: 2px solid #76b900; background: #223116; }
+.packet-explanation { border-left: 3px solid #76b900; background: #1a2512; padding: 15px 18px; min-height: 126px; }
+#packet-stage { font: 700 11px ui-monospace,monospace; letter-spacing: 1px; color: #c7e5a4; }
+#packet-caption { font-size: 17px; margin: 10px 0 0; color: #e1e9d7; }
+.playback-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+.playback-controls button { font-size: 14px; }
+.course-shell .mode-diagram .detail { min-height: 0; padding: 13px 16px; font-size: 15px; }
+.course-shell .mode-diagram .detail p { margin-top: 5px; }
+.course-shell .mode-path { flex-direction: row; gap: 8px; }
+.course-shell .mode-path .node { min-width: 0; padding: 14px 10px; }
+.course-shell .mode-path .arrow { transform: none; }
+@media(max-width: 600px) {
+ .course-shell .mode-path .node { font-size: 14px; padding: 10px 4px; }.course-shell .mode-path .node small { font-size: 11px; }
+ .course-shell .mode-path .arrow { font-size: 16px; }
+ .packet-token { font-size: 10px; }.packet-token > span { padding: 6px 3px; }
+ #packet-caption { font-size: 15px; }
+ .playback-controls button { padding: 8px; font-size: 12px; }
+}
+@media(prefers-reduced-motion: reduce) { .packet-token-wrap { transition: none; } }
+.terminal-course .course { grid-template-rows: minmax(0,1fr); }
+.terminal-course main { min-height: 0; }
+#course-menu p { border: 0; }
+.terminal-course .insert { background: none; border: 0; }
+
+/* BlueField-4: a board-shaped teaching diagram with independently readable layers. */
+.bf4-specs { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:24px 0; }
+.bf4-specs > div { padding:16px 20px; border-left:3px solid #76b900; background:#141d0e; }
+.bf4-specs strong { display:block; color:#dafaaf; font-size:34px; line-height:1.2; }.bf4-specs strong small { font-size:15px; color:#d8e5c9; }
+.bf4-specs span { display:block; font-size:12px; margin-top:8px; color:var(--muted); }
+.course-shell .bf4-system { padding:24px; }.bf4-system .server-chassis { padding:22px; border-radius:14px; background:linear-gradient(135deg,#1b2116,#0d100a); }
+.bf4-system .server-parts { grid-template-columns:minmax(0,1fr) 100px minmax(0,1.2fr); align-items:stretch; }
+.rack-led { display:inline-block; width:7px; height:7px; background:#96d52e; border-radius:50%; box-shadow:0 0 9px #96d52e; margin-right:7px; }
+.hardware-tag { font-size:10px; letter-spacing:1.6px; color:#b1c89a; margin-bottom:12px; }
+.bf4-system .machine { padding:20px 16px; }.bf4-system .machine h3 { font-size:20px; }
+.host-hardware { display:flex; gap:8px; justify-content:center; margin-top:22px; }.host-hardware span { border:1px solid #58604f; padding:8px; font:12px ui-monospace,monospace; }
+.pcie-link { display:flex; flex-direction:column; justify-content:center; align-items:center; gap:8px; }.pcie-link span { font-size:38px; }.pcie-link small { font-size:10px; }
+.mini-card { position:relative; box-shadow:0 8px 22px #0007; }.mini-chip { display:grid; grid-template-columns:auto 1fr; align-items:center; gap:0 12px; padding-top:18px; text-align:left; }
+.mini-chip .chip-symbol { grid-row:span 2; font-size:42px; line-height:1; color:#a1d761; }.mini-chip > span:last-child { font-size:12px; color:#c3d3b3; }
+.gold-contacts { height:13px; background:repeating-linear-gradient(90deg,#9c7d38 0 5px,#443b1b 5px 8px); margin:12px 12px -20px; border-radius:0 0 3px 3px; }
+.external-network { display:flex; flex-direction:column; align-items:center; font-size:13px; gap:6px; }.external-network > span:last-child { color:var(--muted); font-size:12px; }.network-line { height:26px; border-left:2px solid #76b900; }
+.course-shell .anatomy-diagram { padding:24px; }
+.bf4-board { position:relative; display:grid; grid-template-columns:minmax(125px,.75fr) minmax(0,1.5fr) minmax(0,1fr); gap:20px; padding:28px 22px 0; border:2px solid #55783a; border-radius:14px; background:radial-gradient(circle at 50% 30%,#2b381d 0,#17210f 65%); box-shadow:0 14px 30px #0006; }
+.bf4-board::before,.bf4-board::after { content:''; position:absolute; width:8px; height:8px; border:3px solid #727b65; border-radius:50%; top:8px; background:#090d07; }.bf4-board::before { left:8px; }.bf4-board::after { right:8px; }
+.board-ports,.arm-computer,.board-services { display:flex; flex-direction:column; gap:12px; min-width:0; }
+.board-ports { border-right:1px solid #4b6136; padding-right:16px; }.board-label,.port-label { font-size:9px; letter-spacing:1px; color:#afc790; }.port-label { margin-top:3px; }
+.bf4-board button { padding:14px 10px; border-radius:5px; min-width:0; text-align:center; }.bf4-board button strong { display:block; font-size:17px; }.bf4-board button small { display:block; color:#b9caaa; font-size:11px; margin-top:5px; }
+.course-shell .bf4-board button { background:#15200e; border:1px solid #637e46; }.course-shell .bf4-board button[aria-pressed=true] { background:#304919; border-color:#b5ea71; box-shadow:0 0 0 2px #9aca5144; }
+.port-socket { display:block; width:38px; height:26px; margin:0 auto 12px; border:3px solid #a2ad94; background:#080b05; box-shadow:inset 0 -4px #5d643c; }.port-socket.wide { width:52px; height:34px; border-radius:3px; }
+.bf4-board .arm-chip { padding:16px; border:2px solid #86b856; }.core-matrix { display:grid; grid-template-columns:repeat(8,1fr); gap:4px; max-width:220px; margin:14px auto 0; }.core-matrix i { aspect-ratio:1; border:1px solid #a5d473; background:#688e3f; box-shadow:inset 0 0 0 2px #1d3010; }
+.bf4-board .os-chip { background:#324719; }.bf4-board .os-chip strong { color:#d8efb9; }.memory-chip { background:repeating-linear-gradient(90deg,#1a2713 0 28px,#293f1b 28px 30px)!important; }
+.service-tile { border:1px dashed #789953; background:#26391a; padding:15px 12px; font-size:15px; color:#e0efce; }.service-tile small { display:block; color:#b2c39e; font-size:11px; margin-top:4px; }
+.board-pcie { grid-column:1/-1; text-align:center; border-top:1px solid #3e532b; padding-top:12px; font-size:11px; color:#b8ca9f; }.board-pcie .gold-contacts { max-width:65%; height:16px; margin:10px auto -12px; }
+.anatomy-diagram .detail { margin-top:28px; }.board-caption { margin-bottom:0; }.reference-image img { display:block; width:100%; height:auto; margin-top:16px; border:1px solid #34442a; }
+@media(max-width:1100px) { .bf4-board { grid-template-columns:minmax(110px,.7fr) minmax(0,1.3fr); }.board-services { grid-column:1/-1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); }.board-services .board-label,.board-services button { grid-column:1/-1; }.bf4-system .server-parts { grid-template-columns:minmax(0,1fr) 64px minmax(0,1fr); }.bf4-specs strong { font-size:28px; }.bf4-specs > div { padding:14px; } }
+@media(max-width:600px) { .bf4-specs { gap:7px; }.bf4-specs > div { padding:10px 8px; }.bf4-specs strong { font-size:25px; }.bf4-specs strong small { display:block; font-size:11px; }.bf4-specs span { font-size:10px; }.course-shell .anatomy-diagram,.course-shell .bf4-system { padding:14px; }.bf4-board { padding:24px 12px 0; gap:16px; grid-template-columns:minmax(0,1fr); }.board-ports { border-right:0; border-bottom:1px solid #4b6136; padding:0 0 12px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }.board-ports .port-label { display:none; }.board-services { grid-template-columns:minmax(0,1fr); }.board-services .service-tile { padding:10px; }.core-matrix { max-width:180px; }.bf4-system .server-chassis { padding:12px; }.bf4-system .server-parts { grid-template-columns:1fr; gap:16px; }.bf4-system .pcie-link { flex-direction:row; }.bf4-system .pcie-link span { transform:rotate(90deg); }.bf4-system .machine { padding:18px 12px; }.bf4-system .gold-contacts { margin-bottom:-18px; } }
+[data-board-panel][hidden] { display:none; }
+.reference-board { margin-top:16px; }.reference-board img { display:block; width:100%; height:auto; background:#000; border-radius:6px; }.reference-board p { font-size:15px; }.reference-board p.small,.reference-board > a { font-size:12px; }
+.board-view-switcher button { font-size:13px; }
+/* The uploaded PNG stays byte-for-byte unchanged; all mode state is a UI overlay. */
+.photo-mode-diagram { padding:16px!important; }
+#mode-photo { position:relative; width:100%; background:#000; border-radius:7px; overflow:hidden; isolation:isolate; }
+#mode-photo > img { display:block; width:100%; height:auto; }
+.photo-mode-controls { position:absolute; top:2%; left:2%; margin:0; gap:6px; z-index:5; }
+.photo-mode-controls button { background:#101a0cf2; font-size:clamp(10px,1.1vw,14px); padding:7px 12px; }
+.photo-overlay { position:absolute; pointer-events:none; }
+.photo-host { left:6%; top:20.3%; width:54.6%; height:10.5%; border:2px solid transparent; }
+.photo-host[data-active=true] { border-color:#bdeb87; background:#aee75d0d; box-shadow:0 0 15px #9bd44360; }
+.photo-arm { left:57.4%; top:37%; width:31.4%; height:45%; border:2px solid #abdf74; background:#a9d86c09; }
+.photo-arm[data-active=false] { background:#080c07ed; border:1px dashed #657259; display:grid; place-items:center; }
+.arm-off-label { display:none; font-size:clamp(10px,1.5vw,20px); color:#c2cabb; text-align:center; }
+.photo-arm[data-active=false] .arm-off-label { display:block; }
+.photo-routes { inset:0; width:100%; height:100%; overflow:visible; }
+.photo-routes path { fill:none; stroke:#c6ff89; stroke-width:.45; stroke-linecap:round; stroke-linejoin:round; filter:drop-shadow(0 0 2px #64a620); }
+#mode-photo[data-mode=dpu] .nic-route,#mode-photo[data-mode=nic] .dpu-route { display:none; }
+.photo-owner-label { bottom:2%; left:2%; right:2%; width:fit-content; max-width:96%; background:#102005ed; color:#d6f8b1; border-left:3px solid #96d52e; padding:6px 10px; font-size:clamp(9px,1.2vw,15px); }
+.photo-packet { inset:0; }
+.photo-packet .packet-token-wrap { width:auto; top:var(--packet-y); left:var(--packet-x); transform:translate(-50%,-50%); transition:left .7s ease-in-out,top .7s ease-in-out; }
+.photo-packet .packet-token { font-size:clamp(8px,.85vw,12px); box-shadow:0 0 12px #000; }
+.photo-packet .packet-token > span { padding:3px 5px; }
+#mode-photo[data-original=true] .photo-overlay { display:none; }
+.photo-options { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; margin:12px 0; font-size:12px; }
+.photo-options label { cursor:pointer; }.photo-role-summary { margin-bottom:0; }
+.reference-board figcaption { margin:14px 0; }
+.reference-board .image-note { font-size:18px; line-height:1.65; color:#d6e1cc; }
+@media(max-width:600px) { .photo-mode-diagram { padding:8px!important; }.photo-mode-controls button { padding:4px 7px; }.photo-owner-label { padding:3px 5px; }.photo-options { font-size:11px; } }
+@media(prefers-reduced-motion:reduce) { .photo-packet .packet-token-wrap { transition:none; } }
+.photo-playback { position:absolute; top:2%; right:2%; z-index:6; margin:0; gap:5px; flex-wrap:nowrap; align-items:center; }
+.photo-playback button { padding:7px 10px; font-size:clamp(10px,1.1vw,14px); background:#101a0cf2; }
+.photo-playback #packet-play { background:#76b900; color:#0c1304; min-width:80px; }
+.photo-packet .packet-token-wrap { transition:none; }
+@media(max-width:600px) { .photo-playback { gap:3px; }.photo-playback button { padding:4px 6px; }.photo-playback #packet-play { min-width:59px; }.photo-packet .packet-token { font-size:9px; } }

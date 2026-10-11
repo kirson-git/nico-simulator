@@ -1,0 +1,4 @@
+pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #101820; border: 1px solid var(--line); padding: 16px; border-radius: 8px; font: 13px/1.6 monospace; }
+#console { max-height: 320px; overflow-y: auto; }
+summary { cursor: pointer; color: var(--green); }
+#handoff { border: 1px solid var(--green); border-radius: 8px; padding: 0 20px 12px; }

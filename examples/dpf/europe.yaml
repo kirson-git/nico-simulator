@@ -1,0 +1,26 @@
+# DPF v26.4.0 Zero Trust: europe tenant control plane.
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tenant-europe
+  labels:
+    training.dpf.nvidia.com/tenant: europe
+---
+apiVersion: provisioning.dpu.nvidia.com/v1alpha1
+kind: DPUCluster
+metadata:
+  name: tenant-europe
+  namespace: tenant-europe
+  labels:
+    training.dpf.nvidia.com/tenant: europe
+spec:
+  type: kamaji
+  maxNodes: 1000
+  clusterEndpoint:
+    keepalived:
+      interface: enp7s0
+      vip: 192.0.2.200
+      virtualRouterID: 126
+      nodeSelector:
+        node-role.kubernetes.io/control-plane: ''
