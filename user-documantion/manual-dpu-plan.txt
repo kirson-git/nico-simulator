@@ -43,3 +43,10 @@ Verification checkpoint:
 - Existing diagrams, YAML guide and course navigation browser regressions passed.
 - Screenshots reviewed on desktop and 390px mobile.
 - Independent code/content review: no material findings.
+
+Layout and compatibility revision (2026-10-11):
+- Terminal first; per-step rationale, target, command and expected result below.
+- Explicit Next step retains the completed explanation for review.
+- Collapse background recap/diagram; pause animation when collapsed.
+- Keep BF3 simulation distinct from the documented NICo/DPF BF4 ISO/PLDM flow.
+- Verify full sequence, advance guard, reset, collapsed animation, mobile layout.

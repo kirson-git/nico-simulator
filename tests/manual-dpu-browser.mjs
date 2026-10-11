@@ -9,8 +9,15 @@ try {
   page.on('websocket',ws=>sockets.push(ws.url()));
   await page.goto('http://127.0.0.1:8780/manual-dpu');
   await page.getByRole('heading',{name:'One DPU. From OS to HBN.'}).waitFor();
-  assert.match(await page.locator('main').innerText(),/What is a DPU\?/);
   assert.equal(await page.locator('[data-course-nav] a[aria-current="page"]').getAttribute('href'),'/manual-dpu');
+  assert.match(await page.locator('.manual-boundary').innerText(),/not a verified BF4/);
+  assert.ok(await page.locator('#manual-next').isDisabled());
+  const terminalBox=await page.locator('.manual-terminal').boundingBox();
+  const explanationBox=await page.locator('.manual-step').boundingBox();
+  assert.ok(terminalBox.y<explanationBox.y);
+  assert.ok(terminalBox.y<500, 'Terminal should appear near the top');
+  await page.locator('.manual-background summary').click();
+  assert.match(await page.locator('.manual-background').innerText(),/What is a DPU\?/);
   const diagram=page.locator('[data-guide-diagram="manual"]');
   await diagram.getByRole('button',{name:'Play animation',exact:true}).click();
   await page.waitForTimeout(500);
@@ -20,6 +27,11 @@ try {
   await page.waitForTimeout(200);
   assert.ok(Math.abs(await diagram.locator('svg').evaluate(el=>el.getCurrentTime())-t)<.02);
   await diagram.getByRole('button',{name:'Replay animation'}).click();
+  await diagram.getByRole('button',{name:'Play animation',exact:true}).click();
+  await page.locator('.manual-background summary').click();
+  await page.waitForTimeout(50);
+  assert.equal(await diagram.locator('svg').evaluate(el=>el.animationsPaused()),true);
+  await page.evaluate(()=>window.scrollTo(0,0));
   await page.screenshot({path:'/test/manual-dpu-desktop.png',fullPage:true});
   await page.locator('#manual-load').click();
   await page.locator('#manual-target').selectOption('arm');
@@ -28,9 +40,20 @@ try {
   assert.match(await page.locator('#manual-progress').innerText(),/^0 \/ 18/);
   await page.locator('#manual-target').selectOption('host');
   for(let i=0;i<18;i++) {
+    const title=await page.locator('#manual-title').innerText();
+    assert.ok((await page.locator('#manual-expected').innerText()).length>40);
     await page.locator('#manual-load').click();
     await page.getByRole('button',{name:'Run command',exact:true}).click();
     assert.match(await page.locator('#manual-progress').innerText(),new RegExp(`^${i+1} / 18`));
+    assert.equal(await page.locator('#manual-title').innerText(),title, 'Explanation must stay until Next');
+    assert.ok(await page.locator('#manual-load').isDisabled());
+    if(i===0){
+      await page.locator('#manual-input').fill('cat /etc/os-release');
+      await page.getByRole('button',{name:'Run command',exact:true}).click();
+      assert.match(await page.locator('#manual-progress').innerText(),/^1 \/ 18/);
+    }
+    if(i<17) await page.locator('#manual-next').click();
+    else assert.ok(await page.locator('#manual-next').isDisabled());
   }
   await page.locator('#manual-check').click();
   assert.match(await page.locator('#manual-result').innerText(),/^Lesson complete/);
@@ -40,6 +63,7 @@ try {
   const file=await download; assert.equal(file.suggestedFilename(),'manual-dpu-simulated-transcript.txt');
   const stream=await file.createReadStream();let transcript='';for await(const chunk of stream)transcript+=chunk;
   assert.match(transcript,/AUTHORED SIMULATED OUTPUT/);assert.match(transcript,/host RShim unavailable/);
+  await page.locator('#manual-reset').click();
   await page.locator('#manual-input').fill('<img src=x onerror=alert(1)>');
   await page.getByRole('button',{name:'Run command',exact:true}).click();
   assert.equal(await page.locator('#manual-console img').count(),0);
@@ -56,10 +80,12 @@ try {
   assert.match(await page.locator('#manual-progress').innerText(),/^1 \/ 18/);
   await page.reload();
   assert.match(await page.locator('#manual-progress').innerText(),/^0 \/ 18/);
+  await page.locator('.manual-background summary').click();
   await page.emulateMedia({reducedMotion:'reduce'});
   await diagram.getByRole('button',{name:'Play animation',exact:true}).click();
   assert.equal(await diagram.getAttribute('data-step'),'1');
   assert.equal(await diagram.locator('svg').evaluate(el=>el.animationsPaused()),true);
+  await page.locator('.manual-recovery summary').click();
   for(const width of [820,390]) {
     await page.setViewportSize({width,height:844});
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));

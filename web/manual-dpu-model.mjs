@@ -35,7 +35,7 @@ export const steps = [
     'INTERNAL_CPU_OFFLOAD_ENGINE: ENABLED(0) — DPU mode', {modeVerified:true}),
   step('inspect','Discover','Inspect the existing DPU OS','arm','cat /etc/os-release',
     'Start with a bootable Arm Ubuntu system, but no HBN. A DPU is a network adapter with its own Arm CPU, memory, OS and network hardware. This is not the host Ubuntu installation.',
-    'Ubuntu 24.04 LTS — existing Arm OS. HBN: not installed.'),
+    'Ubuntu 22.04 LTS — existing Arm OS. HBN: not installed.'),
   step('management','Discover','Check independent management access','management',managementQuery,
     'This request targets the DPU BMC from the management machine. The simulator supplies a fictional authenticated session; do not enter a real password. Keep this path before restricting the host.',
     'Authenticated training response: {"Mode":"DpuMode"}\nIndependent management path verified.', {management:true}),
@@ -48,8 +48,8 @@ export const steps = [
     'This standalone example pushes the bundle through host RShim. It replaces the existing Arm OS. BMC/Redfish provisioning used by DPF is a separate transport. Wait for completion before any reset.',
     'Host sends BFB + configuration over RShim.\nDPU installer replaces the Arm OS and prepares the ports.\nInstallation completes; Arm Linux boots. HBN container still absent.', {os:'bfb',hbn:false}),
   step('os','Provision','Verify the new Arm software','arm','cat /etc/mlnx-release',
-    'Read the release inside the DPU. Successful transfer alone does not verify the installed OS. The fixture models a DOCA 3.4 / Ubuntu 24.04 bundle, not a BlueField-4 installation recipe.',
-    'Teaching profile: bf-bundle / DOCA 3.4 / Ubuntu 24.04 / Arm64\nNew Arm OS verified; this line is simulated, not captured release output.', {osVerified:true}),
+    'Read the release inside the DPU. Successful transfer alone does not verify the installed OS. The fixture models a DOCA 3.4 / Ubuntu 22.04 bundle, not a BlueField-4 installation recipe.',
+    'Teaching profile: bf-bundle / DOCA 3.4 / Ubuntu 22.04 / Arm64\nNew Arm OS verified; this line is simulated, not captured release output.', {osVerified:true}),
   step('routing','Services','Inspect the prepared HBN network file','arm','cat /opt/training/hbn/etc/network/interfaces',
     'Two fictional subnets connect the host-facing interface and uplink. The host and peer return route are preconfigured in this fixture. The next setup step consumes this file; no file editing is required.',
     prepared.interfaces, {routingReviewed:true}),
@@ -84,6 +84,28 @@ export const steps = [
     'Recheck the independent BMC path. Completion requires both denied host access and preserved management; a Mode field alone cannot prove all restrictions.',
     'Authenticated training response: {"Mode":"DpuMode"}\nManagement still reachable. Combine this with the denied host check.', {managementAfter:true}),
 ];
+const expectedResults = [
+  "DPU mode is ENABLED(0). In the optional NIC-mode scenario, stage the change and simulate a power cycle before continuing.",
+  "Ubuntu is running on the DPU’s Arm computer. This says nothing about the host OS or whether HBN is installed.",
+  "The fictional BMC request succeeds from the management machine. This gives you a separate path before host access is restricted.",
+  "Bridge settings list the two uplinks and host representors. Reading this file changes nothing; the installer consumes it later.",
+  "The simulated checksum is OK. On hardware, verify against a checksum from a trusted release before installing.",
+  "The bundle transfer and Arm OS installation finish. The HBN container is still absent: installing an OS and starting a service are separate steps.",
+  "The simulated release identifies the newly installed Arm software. A successful transfer alone would not establish this.",
+  "The file defines host-facing and uplink subnets. This prepared example uses routing, with no VXLAN configuration.",
+  "Service directories and networking configuration are prepared. The container has not started yet.",
+  "The standalone kubelet consumes the manifest and starts the container. The following checks establish whether it is healthy.",
+  "The fictional sim-hbn container is Running. This verifies its process state, not packet forwarding.",
+  "The authored startup lines report configuration loaded and processes started. Next, check those processes from inside the container.",
+  "FRR, nl2doca and neighmgr show RUNNING. These are simulated HBN service checks, separate from the Arm OS check.",
+  "Two connected routes match the prepared subnets. DPU mode by itself does not create these routes.",
+  "Three fictional replies demonstrate the intended host-to-peer path. No packets were sent and hardware offload is not proven.",
+  "Host management privileges are restricted while Arm services remain active. This is a privilege boundary, not a tenant network ACL.",
+  "Host RShim access fails. Here that failure is the expected success condition; it does not imply host data traffic is blocked.",
+  "The independent BMC request still succeeds. Together with the denied host check, it completes the simulated management boundary test."
+];
+steps.forEach((step, index) => { step.expected = expectedResults[index]; });
+
 export function initialState(mode = 'dpu') {
   return {stage:0,mode,pendingMode:null,os:'existing',hbn:false,restricted:false,
     modeVerified:false,management:false,osVerified:false,services:false,
@@ -112,7 +134,7 @@ export function execute(previous, target, input) {
   if(target !== matched.target) return say(`Wrong terminal: this command belongs on ${matched.target}. No state changed.`);
   if((target==='arm'||target==='hbn') && s.mode !== 'dpu') return say('Arm OS is unavailable in this NIC-mode fixture. Change mode from the host and simulate the reset first.');
   if(command===modeQuery && s.mode !== 'dpu') return say('INTERNAL_CPU_OFFLOAD_ENGINE: DISABLED(1) — NIC mode. Stage DPU mode and reset before continuing.');
-  if(s.restricted && command==='cat /etc/os-release') return say('Ubuntu 24.04 LTS — provisioned Arm OS remains accessible to the infrastructure administrator.');
+  if(s.restricted && command==='cat /etc/os-release') return say('Ubuntu 22.04 LTS — provisioned Arm OS remains accessible to the infrastructure administrator.');
   if(matched !== current) return say(`Complete the current step first: ${current?.title ?? 'lesson complete; reset to repeat'}.`);
   Object.assign(s,matched.effect);s.stage++;
   return say(matched.output);

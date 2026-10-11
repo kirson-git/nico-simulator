@@ -28,7 +28,9 @@ The Kubernetes exercise runs real commands against an isolated two-node **kind**
 cluster. This course does not install DPF, provision physical DPUs, mount an ISO
 on a real server, or deploy HBN. Additional hands-on lessons are marked **Planned**.
 
-The hardware introduction discusses BlueField-4. The prepared DPF 26.4 YAMLs
+The hardware introduction discusses BlueField-4. The manual BFB/HBN exercise
+uses a BlueField-3 profile, with a BF4 compatibility explanation on the lesson page.
+The prepared DPF 26.4 YAMLs
 are teaching copies from a BlueField-3 lab; this is not a BlueField-4 deployment
 compatibility claim. The original uploaded diagrams remain unchanged, with
 nearby explanations of their historical labels.

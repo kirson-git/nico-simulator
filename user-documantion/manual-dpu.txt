@@ -17,7 +17,8 @@ DPF itself is not installed. This is not a BlueField-4 deployment procedure.
 USE
 Select Load command, then Run command; you may also type the shown command.
 The terminal selector identifies host, DPU Arm OS, HBN container or management.
-It follows the next guided step automatically. Select a wrong terminal to see
+After each successful command, review the explanation and expected result beneath
+the terminal. Select Next step to continue; the terminal target follows that step. Select a wrong terminal to see
 why context matters. All inputs are matched to a fixed simulation command list;
 no real shell, WebSocket, subprocess, curl request or hardware operation runs.
 
@@ -53,3 +54,17 @@ The lesson links NVIDIA BSP mode/BFB, DOCA 3.4 HBN and DPF 26.4 HBN documentatio
 Its simulated outputs are authored summaries, not copied production transcripts.
 Actual hardware logs can later replace selected fixtures after read-only collection,
 version matching and redaction. Simulator development does not flash or reset DPUs.
+
+BF4 COMPATIBILITY REVIEW (2026-10-11)
+This remains a BF3 exercise. NVIDIA’s NICo/DPF BF4 integration documents an OS ISO
+and PSID-selected PLDM firmware bundles instead of the BF3 BFB artifact. This does
+not establish a universal manual BF4 procedure. HBN 3.4’s validated platform list
+names BF2/BF3; this lesson must not claim BF4 HBN validation. The simulated Arm OS
+profile is Ubuntu 22.04, matching that HBN release’s Supported BlueField OS section.
+Sources:
+https://docs.nvidia.com/infra-controller/documentation/getting-started/installation-options/dpf-setup
+https://networking-docs.nvidia.com/doca/archive/3-4-0/hbn-service-release-notes
+
+LAYOUT
+Terminal first, current-step explanation below. A successful check stays visible
+until Next step. DPU recap, goals and animation are expandable below the exercise.

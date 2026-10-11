@@ -10,7 +10,7 @@
 .manual-step { border:1px solid #4b6255; background:var(--panel); padding:22px; border-radius:10px; }
 .manual-step h3 { font-size:26px; margin:12px 0; }
 .manual-step p { font-size:17px; }.manual-where { color:#e3a456; }
-.manual-practice pre,.manual-files pre { white-space:pre-wrap; overflow-wrap:anywhere; font:14px/1.65 ui-monospace,monospace; background:#10171b; padding:16px; border-radius:6px; }
+.manual-practice pre,.manual-files pre,.manual-recovery pre { white-space:pre-wrap; overflow-wrap:anywhere; font:14px/1.65 ui-monospace,monospace; background:#10171b; padding:16px; border-radius:6px; }
 .manual-recovery,.manual-files { border-top:1px solid var(--line); padding:18px 0; margin-top:20px; }
 .manual-practice summary,.manual-files summary { cursor:pointer; color:var(--blue); }
 .manual-terminal { border:1px solid #455766; border-radius:10px; overflow:hidden; margin-top:18px; background:#080e13; }
@@ -25,3 +25,16 @@
 #manual-handoff { padding-top:20px; border-top:2px solid var(--green); margin-top:25px; }
 #manual-handoff[hidden] { display:none; }
 @media(max-width:700px) { .manual-goals { grid-template-columns:1fr; }.manual-step { padding:15px; }#manual-form { flex-wrap:wrap; }#manual-form button { width:100%; }#manual-prompt { font-size:12px; }#manual-console { height:230px; } }
+
+.manual-step { margin-top:18px; }
+.manual-step h2 { font-size:26px; margin:12px 0; letter-spacing:0; }
+.manual-step h3 { font-size:16px; margin:20px 0 6px; color:var(--blue); }
+.manual-step .manual-help { color:var(--muted); font-size:14px; }
+.manual-practice .manual-status { margin:10px 0; }
+.manual-terminal { margin-top:10px; }
+.manual-background,.manual-compatibility { border-top:1px solid var(--line); padding:18px 0; margin-top:24px; }
+.manual-background summary,.manual-recovery summary { cursor:pointer; color:var(--blue); }
+.manual-compatibility h2 { font-size:26px; }
+.manual-boundary { font-size:16px; margin:12px 0; }
+.manual-step button:disabled { opacity:.5; cursor:default; }
+#bf4-compatibility { scroll-margin-top:24px; }
