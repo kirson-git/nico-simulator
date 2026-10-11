@@ -1,0 +1,45 @@
+MANUAL DPU LAB — implementation brief, 2026-10-11
+
+User goal: explain what a DPU is, then practice a manual lifecycle before DPF.
+Begin with an existing Arm OS and no HBN. Make the goal/outcome explicit and
+show host, BMC, Arm OS/container and hardware forwarding on a readable diagram.
+Use prepared Linux-style CLI commands and simulated output; never execute input.
+
+Profile: BlueField-3 teaching procedure; keep the BlueField-4 introduction.
+DPU mode precedes HBN. BFB replaces the Arm OS; HBN is a separate container.
+Host-side RShim provisioning precedes host restrictions. Verify out-of-band
+management before restricting host access. A container being Running is not
+proof that networking works. DPF automation is the subsequent learning path.
+
+Implementation:
+1. Pure browser-local command/state model and prepared files, with tests for
+   ordering, terminal context, reset, NIC recovery, restrictions and injection.
+2. Manual lesson page: what/goal/outcome, shared animated SVG, CLI, step guidance,
+   status evidence, transcript export, prepared files and DPF comparison.
+3. Add route/static allowlist and course navigation after DPU 101; README guide.
+4. Unit + browser checks, mobile/reduced motion, zero API writes/WebSockets.
+5. Review, build and restart course only, preserve kind/learner state, publish.
+
+Log provenance: all initial fixtures are authored simulations based on NVIDIA
+references. No claim to be captured hardware logs. Actual read-only evidence can
+be added after collection/verification/redaction in a separately authorized run.
+
+References:
+https://networking-docs.nvidia.com/bsp/4.16.0/modes-of-operation
+https://networking-docs.nvidia.com/bsp/4.16.0/deploying-bluefield-software-from-host
+https://networking-docs.nvidia.com/doca/archive/3-4-0/hbn-service-deployment
+https://networking-docs.nvidia.com/dpf/26.4.0/hbn-in-dpf-zero-trust
+
+Acceptance: learners can finish the sequence without edits; progress requires
+observed checks, no HBN in NIC mode, no host RShim after restrictions, simulated
+power-cycle applies pending mode only. Full reset restores clean state. Unsupported
+commands remain inert. Browser has no access to real terminals or management IPs.
+
+Verification checkpoint:
+- 15/15 unit tests passed, including 8 new lifecycle/CLI guards.
+- 3/3 mocked launcher lifecycle tests passed; Bash syntax passed.
+- Manual browser workflow: all 18 stages, wrong target, NIC recovery, transcript,
+  reset/reload, reduced motion, mobile scrolling, inert input: passed.
+- Existing diagrams, YAML guide and course navigation browser regressions passed.
+- Screenshots reviewed on desktop and 390px mobile.
+- Independent code/content review: no material findings.

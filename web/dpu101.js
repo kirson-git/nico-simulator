@@ -71,6 +71,7 @@ const chapters = [
   {nav: 'OS first, then containers', title: 'Install the DPU OS. Then add services.', html: `
     <p class="lead">In DPU mode, containers need a running Arm Linux system underneath them.</p>
     ${guideDiagram('software')}
+    <p><a href="/manual-dpu">Next: practice the manual DPU-to-HBN lifecycle →</a></p>
     <p><b>DOCA</b> is NVIDIA’s software platform for DPU services; it runs with Linux. In DPF, the DPU joins a Kubernetes cluster before service pods run on it.</p>
     <p><b>HBN</b> means Host-Based Networking. It is a service container on the DPU, despite “host” in the name. Installing the DPU OS alone does not deploy or configure HBN.</p>
     <div class="callout"><b>DPF is the orchestrator:</b> its management controllers coordinate DPU provisioning and service deployment. This introduction explains the sequence; it does not install anything.</div>

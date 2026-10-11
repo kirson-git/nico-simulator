@@ -1,6 +1,12 @@
 // The l-csi guide's visual grammar: colored domains, labeled arrows and SVG motion.
 // Course concepts only; these diagrams do not represent live deployment status.
 const descriptions = {
+  manual: [
+    'What is a DPU? The card has an Arm computer and network hardware. First inspect its mode. HBN requires the Arm environment; an installed OS can remain on storage while NIC mode makes Arm unavailable.',
+    'Install the Arm OS: the trusted host pushes a BFB through RShim in this manual example. This is a provisioning path, not the application data path. It must happen before disabling host RShim.',
+    'Start and configure HBN: the service runs in a container on Arm Linux and programs networking. Supported traffic can forward in hardware. The solid line shows the illustrative host-to-fabric data path.',
+    'Restrict the host: the host RShim path is now blocked in our final scenario. Keep independent management through the BMC and the authorized Arm administration path. This does not imply all host data packets are blocked.',
+  ],
   modes: [
     'Who sets the rules? In NIC mode, the host controls the adapter. In DPU mode, the Arm OS runs the infrastructure software and controls the network engine.',
     'Follow the packet: the host sends it over PCIe to the network hardware. Supported flows are handled in hardware; every packet does not need to visit an Arm CPU.',
@@ -13,8 +19,8 @@ const descriptions = {
     'Only after the OS and cluster are ready can DPF deploy service containers onto the DPU. HBN is one example; it still needs its own configuration.',
   ],
 };
-const headings = {modes: 'Same card. Different control owner.', software: 'From a bare DPU to running services'};
-const stageNames = {modes: ['Control ownership', 'Hardware forwarding', 'Out to the network'], software: ['Provision', 'Boot the OS', 'Join the cluster', 'Deploy services']};
+const headings = {manual: 'Host, DPU and network: who does what?', modes: 'Same card. Different control owner.', software: 'From a bare DPU to running services'};
+const stageNames = {manual: ['Identify the systems', 'Install the BFB', 'Run HBN and forward', 'Restrict and retain management'], modes: ['Control ownership', 'Hardware forwarding', 'Out to the network'], software: ['Provision', 'Boot the OS', 'Join the cluster', 'Deploy services']};
 const label = (x, y, text, cls = 'gd-text', anchor = 'middle') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${text}</text>`;
 const box = (x, y, w, h, title, sub, cls = '') => `<g class="gd-box ${cls}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>${label(x+w/2, y+28, title)}${sub ? label(x+w/2, y+51, sub, 'gd-small') : ''}</g>`;
 const badge = (x,y,n) => `<circle cx="${x}" cy="${y}" r="14" class="gd-number"/>${label(x,y+6,n,'gd-number-text')}`;
@@ -76,6 +82,37 @@ function softwareDrawing() {
   </svg>`;
 }
 
+function manualDrawing() {
+  return `<svg viewBox="0 0 940 470" role="img" aria-label="The host pushes a BFB to the DPU Arm OS before restriction. HBN programs the network engine. Host traffic forwards to the fabric. The management machine reaches a separate DPU BMC.">
+    ${defs('gd-manual-arrow')}
+    <rect x="320" y="12" width="378" height="434" rx="14" class="gd-lane gd-dpu"/>
+    ${label(510,38,'BLUEFIELD DPU','gd-lane-title')}
+    ${box(20,58,244,72,'Management machine','Independent admin network','gd-host')}
+    ${box(340,58,338,72,'DPU BMC','Management controller','gd-host')}
+    ${box(340,158,338,64,'Arm Linux OS','Separate CPU, memory and OS','gd-os')}
+    ${box(340,247,338,64,'HBN container','Services configure networking','gd-services')}
+    ${box(340,356,338,65,'Network engine','Hardware forwarding','gd-hardware')}
+    ${box(20,350,244,78,'Host server','Host OS + applications','gd-host')}
+    ${box(752,350,168,78,'Network fabric','Test peer','gd-tenant')}
+    ${arrow('M264 93 H338','gd-control','gd-manual-arrow')}
+    ${arrow('M510 130 V156','gd-control','gd-manual-arrow')}
+    <g class="gd-manual-rshim">${arrow('M140 349 V190 H338','gd-control','gd-manual-arrow')}
+      ${label(166,240,'BFB over RShim','gd-small','start')}
+      ${label(166,263,'before restriction','gd-small','start')}</g>
+    ${arrow('M510 222 V245','gd-control','gd-manual-arrow')}
+    ${arrow('M510 311 V353','gd-control','gd-manual-arrow')}
+    ${label(527,338,'Programs rules','gd-small','start')}
+    ${arrow('M264 387 H337','gd-packet-route','gd-manual-arrow')}
+    ${arrow('M678 387 H750','gd-packet-route','gd-manual-arrow')}
+    ${label(300,376,'PCIe','gd-small')}
+    ${label(714,376,'port','gd-small')}
+    <g class="gd-manual-lock">${label(186,305,'Host RShim blocked','gd-small')}<path d="M128 281 L152 305 M152 281 L128 305" stroke="#ef7a6c" stroke-width="4"/></g>
+    <circle r="7" class="gd-token"><animateMotion dur="12s" repeatCount="indefinite" path="M140 349 V190 H338" keyPoints="0;0;1;1" keyTimes="0;.25;.49;1" calcMode="linear"/><animate attributeName="opacity" values="0;1;0;0" keyTimes="0;.25;.5;.75" dur="12s" calcMode="discrete" repeatCount="indefinite"/></circle>
+    <circle r="7" class="gd-packet"><animateMotion dur="12s" repeatCount="indefinite" path="M264 387 H750" keyPoints="0;0;1;1" keyTimes="0;.5;.74;1" calcMode="linear"/><animate attributeName="opacity" values="0;0;1;0" keyTimes="0;.25;.5;.75" dur="12s" calcMode="discrete" repeatCount="indefinite"/></circle>
+    <circle r="7" class="gd-token"><animateMotion dur="12s" repeatCount="indefinite" path="M264 93 H338" keyPoints="0;0;1" keyTimes="0;.75;1" calcMode="linear"/><animate attributeName="opacity" values="0;0;0;1" keyTimes="0;.25;.5;.75" dur="12s" calcMode="discrete" repeatCount="indefinite"/></circle>
+  </svg>`;
+}
+
 export function guideDiagram(kind) {
   return `<figure class="guide-diagram" data-guide-diagram="${kind}" data-step="0">
     <div class="gd-toolbar"><span class="gd-heading">${headings[kind]}</span><div class="gd-controls" role="group" aria-label="Diagram animation">
@@ -83,8 +120,9 @@ export function guideDiagram(kind) {
       <button type="button" data-guide-next aria-label="Next step">Step →</button>
       <button type="button" data-guide-replay aria-label="Replay animation">↺</button>
     </div></div>
-    <div class="gd-legend"><span class="gd-legend-host">Host / management</span><span class="gd-legend-dpu">DPU infrastructure</span><span class="gd-legend-flow">${kind === 'modes' ? 'Moving packet' : 'Provisioning step'}</span></div>
-    <div class="gd-scroll" role="region" tabindex="0" aria-label="${headings[kind]} diagram; scroll horizontally on small screens">${kind === 'modes' ? modeDrawing() : softwareDrawing()}</div>
+    <div class="gd-legend"><span class="gd-legend-host">Host / management</span><span class="gd-legend-dpu">DPU infrastructure</span><span class="gd-legend-flow">${kind === 'modes' || kind === 'manual' ? 'Data packet' : 'Provisioning step'}</span></div>
+    ${kind === 'manual' ? '<p class="gd-path-key">Dashed arrows: management / configuration. Solid arrows: data forwarding. Playback explains the lifecycle; CLI progress is tracked below.</p>' : ''}
+    <div class="gd-scroll" role="region" tabindex="0" aria-label="${headings[kind]} diagram; scroll horizontally on small screens">${kind === 'modes' ? modeDrawing() : kind === 'manual' ? manualDrawing() : softwareDrawing()}</div>
     <p class="gd-scroll-hint">Swipe the diagram sideways to explore it. Keyboard: focus it and use the arrow keys.</p>
     <figcaption><strong data-guide-step></strong><p data-guide-caption aria-live="polite"></p></figcaption>
   </figure>`;

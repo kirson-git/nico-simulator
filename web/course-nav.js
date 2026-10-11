@@ -5,6 +5,7 @@ export const introTopics = [
   ['software', 'OS first, then containers'],
 ];
 const groups = [
+  ['01b', 'Manual DPU → HBN', '/manual-dpu', 'Simulated CLI'],
   ['02', 'Kubernetes basics', '/kubernetes', 'Hands-on'],
   ['03', 'Prerequisites', null, 'Planned'],
   ['04', 'DPF operator', null, 'Planned'],

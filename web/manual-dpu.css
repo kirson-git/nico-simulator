@@ -1,0 +1,27 @@
+.manual-goals { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin:26px 0; }
+.manual-goals section { border:1px solid var(--line); border-radius:10px; padding:20px; background:var(--panel); }
+.manual-goals h2 { font-size:23px; margin:0 0 8px; letter-spacing:0; }
+.manual-goals p { margin:0; font-size:17px; }
+.manual-boundary { border-left:3px solid #e3a456; padding:12px 18px; background:#292217; }
+.manual-practice > h2 { margin-top:40px; }
+.manual-status { display:flex; gap:8px; flex-wrap:wrap; margin:18px 0; }
+.manual-status span { padding:6px 12px; border:1px solid var(--line); border-radius:5px; color:var(--muted); font-size:14px; }
+.manual-status span[data-ready="true"] { color:var(--green); border-color:#637c43; }
+.manual-step { border:1px solid #4b6255; background:var(--panel); padding:22px; border-radius:10px; }
+.manual-step h3 { font-size:26px; margin:12px 0; }
+.manual-step p { font-size:17px; }.manual-where { color:#e3a456; }
+.manual-practice pre,.manual-files pre { white-space:pre-wrap; overflow-wrap:anywhere; font:14px/1.65 ui-monospace,monospace; background:#10171b; padding:16px; border-radius:6px; }
+.manual-recovery,.manual-files { border-top:1px solid var(--line); padding:18px 0; margin-top:20px; }
+.manual-practice summary,.manual-files summary { cursor:pointer; color:var(--blue); }
+.manual-terminal { border:1px solid #455766; border-radius:10px; overflow:hidden; margin-top:18px; background:#080e13; }
+.manual-terminal-head { display:flex; align-items:center; gap:12px; padding:12px 16px; background:#17232c; flex-wrap:wrap; }
+.manual-terminal-head span { margin-left:auto; font-size:12px; color:#e3a456; }
+#manual-target { font:inherit; color:#e3e8ec; background:#101820; padding:6px; max-width:100%; border:1px solid #586e7b; border-radius:5px; }
+#manual-console { margin:0; height:270px; overflow-y:auto; background:transparent; color:#c6e4bb; }
+#manual-form { display:flex; gap:10px; align-items:center; padding:14px; border-top:1px solid #455766; }
+#manual-prompt { color:#e3a456; font-family:monospace; white-space:nowrap; }
+#manual-input { flex:1; min-width:0; width:100%; padding:10px; border:1px solid #586e7b; border-radius:4px; background:#111c23; color:white; font:14px monospace; margin:0; }
+#manual-steps { padding-left:25px; }#manual-steps li { padding:7px 0; }#manual-steps [aria-current="step"] { color:var(--green); font-weight:700; }
+#manual-handoff { padding-top:20px; border-top:2px solid var(--green); margin-top:25px; }
+#manual-handoff[hidden] { display:none; }
+@media(max-width:700px) { .manual-goals { grid-template-columns:1fr; }.manual-step { padding:15px; }#manual-form { flex-wrap:wrap; }#manual-form button { width:100%; }#manual-prompt { font-size:12px; }#manual-console { height:230px; } }

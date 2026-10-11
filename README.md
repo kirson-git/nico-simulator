@@ -15,11 +15,15 @@ edit files to follow them.
 | DPU 101 | Learn what is inside a DPU and how its OS differs from the host OS. |
 | DPU vs NIC mode | Play, pause and step through control ownership and packet flow. |
 | OS → containers | Follow BFB provisioning, Arm Linux boot, cluster join and services. |
+| Manual DPU → HBN | Practice Linux-style commands from an existing Arm OS through BFB, HBN and host restrictions. |
 | Kubernetes basics | Use a real Bash terminal, apply a prepared Europe example, check progress and reset the exercise. |
 | DPU configuration | Inspect eight complete YAMLs and see what each field affects. |
 | Host Ubuntu | Rehearse virtual ISO mounting and an automatic installation in the browser. |
 
-The concept lessons, YAML walkthrough and host installation are simulations.
+The concept lessons, manual DPU CLI, YAML walkthrough and host installation are
+simulations. The manual DPU lesson uses authored fixtures, supports transcript
+export, and requires no real DPU login. See the
+[manual lesson guide](user-documantion/manual-dpu.txt).
 The Kubernetes exercise runs real commands against an isolated two-node **kind**
 cluster. This course does not install DPF, provision physical DPUs, mount an ISO
 on a real server, or deploy HBN. Additional hands-on lessons are marked **Planned**.
@@ -128,6 +132,7 @@ Open these links in a browser on the same Linux machine:
 | Start with DPU 101 | [localhost:8780](http://localhost:8780/) |
 | DPU vs NIC mode | [/#modes](http://localhost:8780/#modes) |
 | OS first, then containers | [/#software](http://localhost:8780/#software) |
+| Manual DPU → HBN | [/manual-dpu](http://localhost:8780/manual-dpu) |
 | Kubernetes exercise | [/kubernetes](http://localhost:8780/kubernetes) |
 | DPU YAML walkthrough | [/dpu-config](http://localhost:8780/dpu-config) |
 | Host Ubuntu rehearsal | [/host-ubuntu](http://localhost:8780/host-ubuntu) |

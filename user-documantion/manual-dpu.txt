@@ -1,0 +1,55 @@
+MANUAL DPU TO HBN — SIMULATED CLI LESSON
+
+Open http://localhost:8780/manual-dpu after starting the workshop.
+Begin with DPU 101 if you are new to DPUs. The manual lesson repeats the key idea:
+a DPU combines network hardware with a separate Arm computer, OS and memory.
+
+GOAL
+Learn which computer runs each command and how to verify the result, before
+learning the DPF resources that automate provisioning and service deployment.
+
+START / OUTCOME
+Start: a BlueField-3 teaching fixture with existing Arm Ubuntu, DPU mode, no HBN.
+Finish: new Arm OS verified, HBN container and services checked, an illustrative
+route tested, host RShim access blocked and independent BMC management preserved.
+DPF itself is not installed. This is not a BlueField-4 deployment procedure.
+
+USE
+Select Load command, then Run command; you may also type the shown command.
+The terminal selector identifies host, DPU Arm OS, HBN container or management.
+It follows the next guided step automatically. Select a wrong terminal to see
+why context matters. All inputs are matched to a fixed simulation command list;
+no real shell, WebSocket, subprocess, curl request or hardware operation runs.
+
+The prepared HBN resource/script and config directories are represented as
+step-specific terminal contexts. Their vendor binaries/manifests are not bundled.
+The file examples are complete teaching fixtures, not a production deployment.
+
+The diagram is explanatory playback, independent from exercise progress.
+Play/Pause, Step and Replay are at the top right. Dashed lines are management or
+configuration. The solid path is host data forwarding. It does not mean every
+packet crosses an Arm CPU. Reduced-motion mode advances diagram stages manually.
+
+OPTIONAL NIC SCENARIO
+The NIC-mode button resets the exercise. Query the mode, stage the displayed
+INTERNAL_CPU_OFFLOAD_ENGINE=0 change on the host, then run lab power-cycle.
+That last command is a simulator control, not an actual Linux/NVIDIA command.
+A staged setting alone does not activate DPU mode. Query again to continue.
+
+VERIFY
+Check my work lists independent evidence for OS, container/services, traffic,
+restriction and management. Running a container is not a forwarding test. The
+prepared ping demonstrates a routed fixture; it does not prove physical offload,
+VXLAN or tenant isolation. Host restrictions are not a tenant network ACL.
+
+LOGS
+Download simulated transcript exports the exact commands entered and deterministic
+teaching results from this browser session. These are labeled simulated and must
+not be described as captured DPU logs. Reload or Reset lesson clears progress.
+No real password or credential is needed; do not paste one into the lesson.
+
+SOURCES / FUTURE EVIDENCE
+The lesson links NVIDIA BSP mode/BFB, DOCA 3.4 HBN and DPF 26.4 HBN documentation.
+Its simulated outputs are authored summaries, not copied production transcripts.
+Actual hardware logs can later replace selected fixtures after read-only collection,
+version matching and redaction. Simulator development does not flash or reset DPUs.

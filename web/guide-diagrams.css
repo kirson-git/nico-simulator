@@ -45,3 +45,8 @@
   .gd-controls { margin-left:auto; }.gd-heading { font-size:18px; }.gd-legend { font-size:12px; gap:6px 14px; }
   .guide-diagram figcaption p { font-size:16px; }.gd-scroll svg { min-width:820px; }
 }
+
+.guide-diagram[data-guide-diagram="manual"] .gd-manual-lock { opacity:0; }
+.guide-diagram[data-guide-diagram="manual"][data-step="3"] .gd-manual-lock { opacity:1; }
+.guide-diagram[data-guide-diagram="manual"][data-step="3"] .gd-manual-rshim { opacity:.3; }
+.guide-diagram .gd-path-key { font-size:14px; color:var(--gd-muted); margin:0 0 12px; }
