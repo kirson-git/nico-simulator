@@ -136,7 +136,7 @@ Open these links in a browser on the same Linux machine:
 | Start with DPU 101 | [localhost:8780](http://localhost:8780/) |
 | DPU vs NIC mode | [/#modes](http://localhost:8780/#modes) |
 | OS first, then containers | [/#software](http://localhost:8780/#software) |
-| Why DPF? | Understand the motivation, where DPF helps, and how it coordinates DPU provisioning and services. |
+| Why DPF? | [/dpf101](http://localhost:8780/dpf101) |
 | Manual DPU → HBN | [/manual-dpu](http://localhost:8780/manual-dpu) |
 | Kubernetes exercise | [/kubernetes](http://localhost:8780/kubernetes) |
 | DPU YAML walkthrough | [/dpu-config](http://localhost:8780/dpu-config) |
