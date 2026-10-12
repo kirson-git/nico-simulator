@@ -22,8 +22,16 @@ cleanup, keyboard/mobile layout, browser-only requests, existing shared diagram
 regressions and existing unit tests. Preview then update course only; keep the
 kind cluster and learner workspace. Publish to the existing simulator repo.
 
-Extension: three bounded scenes for DGX GB200 rack anatomy, one prepared
+Extension: three bounded scenes for GB300 NVL72 rack anatomy, one prepared
 telemetry configuration-reference change spanning selected racks, and whole-rack
 Europe/Asia tenancy with HBN network isolation. Keep NVLink/ConnectX separate
 from DPF's DPU scope. Reuse shared playback, show complete illustrative YAML,
 validate selection/profile switching, diagram lifecycle and mobile rendering.
+
+Revised fleet story: show three management Kubernetes nodes and required,
+conditional and optional components; depict a separate server/DPU with Redfish
+baseline provisioning, DPU cluster join, Argo CD service reconciliation and
+readiness validation. #selection retains the one-line telemetry example.
+Use the provided PNG as the BFB/DOCA/services visual reference, preserve its
+original bytes, and change rack/fleet arithmetic to the explicitly named GB300
+AI Factory design (one BlueField-3 per tray, 18 per rack, 36 across two racks).

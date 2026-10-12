@@ -1,6 +1,14 @@
 // The l-csi guide's visual grammar: colored domains, labeled arrows and SVG motion.
 // Course concepts only; these diagrams do not represent live deployment status.
 const descriptions = {
+  control: [
+    'Prepare one management Kubernetes cluster on three example nodes. Install cert-manager, Argo CD, Node Feature Discovery and Maintenance Operator; this default design also uses Kamaji and persistent etcd storage. Then install and configure DPF.',
+    'Declare BFB, DPUFlavor, DPUCluster and DPUDeployment resources in the management API. Controllers watch these objects and reconcile selected devices. Inventory, BMC credentials, network access and compatible artifacts must already be prepared.',
+    'In this BlueField-3 Zero Trust example, DPF coordinates provisioning through the DPU BMC using Redfish. The selected full BFB supplies the Arm OS, firmware and DOCA baseline. This installs the DPU computer, not the server host OS.',
+    'Arm Linux boots and joins the separate DPU Kubernetes cluster. Kamaji hosts its control plane on management nodes. DPU system networking, kubelet and container runtime must be ready before service workloads can run.',
+    'DPUService controllers create Argo CD Applications from declared service templates and configuration. Argo CD synchronizes Helm resources to the DPU cluster; Kubernetes schedules the pods, and the DPU runtime pulls service images. HBN and Argus need their own compatible configuration.',
+    'Validate conditions and service behavior: HBN routes and tenant isolation, Argus inspection and event export, and metrics. Confirm supported versions, access controls, capacity, recovery and upgrade procedures before production use. This playback does not certify a production deployment.',
+  ],
   fleet: [
     'Change the DPUDeployment service configuration reference in the management API. The BFB, flavor, template and both telemetry profiles already exist. This is simulated intent.',
     'Match inventory labels: fleet=east on DPUNodes and managed=true on DPUDevices. Rack 01 and Rack 02 are selected; Rack 03 is outside the selection. The DPUCluster label selects infra-east.',
@@ -42,8 +50,8 @@ const descriptions = {
     'Only after the OS and cluster are ready can DPF deploy service containers onto the DPU. HBN is one example; it still needs its own configuration.',
   ],
 };
-const headings = {fleet: 'One intent → selected racks → verified outcome', tenants: 'Two tenants across four reserved racks', rollout: 'From declared intent to service pods', servicePaths: 'Two services. Two different jobs.', manual: 'Host, DPU and network: who does what?', modes: 'Same card. Different control owner.', software: 'From a bare DPU to running services'};
-const stageNames = {fleet: ['Change the profile', 'Select the fleet', 'Reconcile the service', 'Verify and investigate'], tenants: ['Deliver configuration', 'Europe to Europe', 'Asia to Asia', 'Test the tenant boundary'], rollout: ['Declare', 'Resolve and synchronize', 'Deploy on selected DPUs', 'Verify the outcome'], servicePaths: ['Forward traffic', 'Inspect memory', 'Export security events'], manual: ['Identify the systems', 'Install the BFB', 'Run HBN and forward', 'Restrict and retain management'], modes: ['Control ownership', 'Hardware forwarding', 'Out to the network'], software: ['Provision', 'Boot the OS', 'Join the cluster', 'Deploy services']};
+const headings = {control: 'Kubernetes intent → OS / DOCA → service containers → validation', fleet: 'One intent → selected racks → verified outcome', tenants: 'Two tenants across four reserved racks', rollout: 'From declared intent to service pods', servicePaths: 'Two services. Two different jobs.', manual: 'Host, DPU and network: who does what?', modes: 'Same card. Different control owner.', software: 'From a bare DPU to running services'};
+const stageNames = {control: ['Prepare the platform', 'Declare the fleet', 'Provision the baseline', 'Join the DPU cluster', 'Deploy service containers', 'Validate production readiness'], fleet: ['Change the profile', 'Select the fleet', 'Reconcile the service', 'Verify and investigate'], tenants: ['Deliver configuration', 'Europe to Europe', 'Asia to Asia', 'Test the tenant boundary'], rollout: ['Declare', 'Resolve and synchronize', 'Deploy on selected DPUs', 'Verify the outcome'], servicePaths: ['Forward traffic', 'Inspect memory', 'Export security events'], manual: ['Identify the systems', 'Install the BFB', 'Run HBN and forward', 'Restrict and retain management'], modes: ['Control ownership', 'Hardware forwarding', 'Out to the network'], software: ['Provision', 'Boot the OS', 'Join the cluster', 'Deploy services']};
 const label = (x, y, text, cls = 'gd-text', anchor = 'middle') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${text}</text>`;
 const box = (x, y, w, h, title, sub, cls = '') => `<g class="gd-box ${cls}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>${label(x+w/2, y+28, title)}${sub ? label(x+w/2, y+51, sub, 'gd-small') : ''}</g>`;
 const badge = (x,y,n) => `<circle cx="${x}" cy="${y}" r="14" class="gd-number"/>${label(x,y+6,n,'gd-number-text')}`;
@@ -198,10 +206,10 @@ function fleetDrawing() {
   <rect x="${x}" y="196" width="268" height="210" rx="12" class="gd-lane ${selected?'gd-dpu':'gd-management'}"/>
   ${label(x+134,225,`Rack 0${n}`,'gd-lane-title')}${label(x+134,250,`fleet: ${selected?'east':'west'}`,'gd-small')}
   ${[0,1,2].map(i=>`<rect x="${x+20}" y="${266+i*19}" width="228" height="12" rx="2" fill="#40505b"/>`).join('')}
-  ${label(x+134,345,'18 trays · 36 BlueField-3 DPUs','gd-small')}
+  ${label(x+134,345,'18 trays · 18 BlueField-3 DPUs','gd-small')}
   <text x="${x+134}" y="380" class="gd-text" text-anchor="middle" ${selected?'data-fleet-desired':''}>${selected?'Desired: baseline':'Outside selection'}</text>
  </g>`;
- return `<svg viewBox="0 0 960 452" role="img" aria-label="A YAML change goes to DPF and targets 72 BlueField DPUs in two east racks; the west rack is not selected. Management flow only.">
+ return `<svg viewBox="0 0 960 452" role="img" aria-label="A YAML change goes to DPF and targets 36 BlueField DPUs in two east racks; the west rack is not selected. Management flow only.">
  ${defs('gd-fleet-arrow')}
  ${box(22,20,220,80,'One YAML change','Telemetry profile reference','gd-host')}
  ${box(339,20,274,80,'DPF management domain','Select · reconcile · observe','gd-services')}
@@ -243,6 +251,55 @@ function tenantsDrawing() {
  </svg>`;
 }
 
+function controlDrawing() {
+ return `<svg viewBox="0 0 1200 750" role="img" aria-label="Three management Kubernetes nodes host DPF and prerequisites on the left. Redfish provisions the server DPU on the right; its Arm OS joins a separate Kamaji-hosted DPU cluster, which schedules service containers.">
+ ${defs('gd-platform-arrow')}
+ <rect x="16" y="12" width="468" height="625" rx="14" class="gd-lane gd-management"/>
+ ${label(250,42,'MANAGEMENT KUBERNETES CLUSTER','gd-lane-title')}
+ ${[0,1,2].map(i=>`<g data-management-node="${i+1}">${box(34+i*148,66,136,64,`mgmt-${i+1}`,'API + etcd','gd-host')}</g>`).join('')}
+ ${label(250,153,'Platform pods scheduled across the nodes','gd-small')}
+ ${box(34,170,432,64,'DPF Operator + controllers','Provisioning · DPUService · service chains','gd-services')}
+ ${box(34,258,204,62,'Argo CD','Helm workload delivery','gd-host')}
+ ${box(262,258,204,62,'cert-manager','Certificates','gd-host')}
+ ${box(34,340,204,62,'NFD','Hardware discovery','gd-host')}
+ ${box(262,340,204,62,'Maintenance','Update coordination','gd-host')}
+ ${box(34,421,432,64,'Kamaji + persistent etcd storage','Default DPU cluster provider','gd-tenant')}
+ ${box(34,528,432,64,'DPU Kubernetes API + scheduler','Separate cluster control plane · hosted as pods','gd-tenant')}
+ ${label(250,619,'Kubernetes CNI / DNS / network reachability','gd-small')}
+ ${box(526,64,163,64,'Desired YAML','Kubernetes resources','gd-host')}
+ <rect x="716" y="12" width="468" height="625" rx="14" class="gd-lane gd-dpu"/>
+ ${label(950,42,'SERVER WITH A BLUEFIELD DPU','gd-lane-title')}
+ ${box(736,66,428,64,'Host OS + customer workloads','Outside this Zero Trust management cluster','gd-host')}
+ <rect x="732" y="166" width="436" height="448" rx="12" class="gd-card"/>
+ ${label(949,191,'DPU · ITS OWN ARM COMPUTER','gd-lane-title')}
+ ${box(746,208,408,62,'DPU BMC','Out-of-band Redfish endpoint','gd-hardware')}
+ <g class="gd-platform-os">${box(746,330,408,64,'Arm Linux + DOCA baseline','From the selected full BF3 BFB · kubelet/runtime','gd-os')}</g>
+ <g class="gd-platform-pods"><rect x="746" y="430" width="408" height="166" rx="10" fill="#162a20" stroke="#56c587"/>
+ ${label(950,452,'SERVICE PODS ON THE DPU','gd-small')}
+ ${box(758,467,184,54,'HBN','Routing / tenant policy','gd-services')}
+ ${box(958,467,184,54,'Argus','Host-memory inspection','gd-services')}
+ ${box(758,532,184,54,'Telemetry','Metrics collection','gd-services')}
+ ${box(958,532,184,54,'Other services','Qualify before adding','gd-services')}</g>
+ ${box(16,664,450,65,'Readiness review','Conditions · traffic · security · recovery checks','gd-host')}
+ ${box(736,664,448,65,'Container registry','The DPU runtime pulls compatible images','gd-host')}
+ ${arrow('M607 128 V202 H468','gd-control','gd-platform-arrow')}
+ ${arrow('M466 221 H683 V239 H744','gd-control','gd-platform-arrow')}
+ ${label(597,247,'Redfish provisioning','gd-small')}
+ ${arrow('M950 270 V328','gd-control','gd-platform-arrow')}${label(1040,304,'Install baseline','gd-small')}
+ ${arrow('M746 362 H667 V550 H468','gd-join','gd-platform-arrow')}${label(604,385,'Worker joins','gd-small')}
+ ${arrow('M138 234 V256','gd-control','gd-platform-arrow')}
+ ${arrow('M138 320 V330 H25 V559 H32','gd-control','gd-platform-arrow')}
+ ${arrow('M466 575 H594 V477 H744','gd-control','gd-platform-arrow')}${label(597,457,'Schedule workloads','gd-small')}
+ ${arrow('M950 664 V598','gd-control','gd-platform-arrow')}${label(1053,649,'Image pull','gd-small')}
+ ${arrow('M746 591 H699 V696 H468','gd-control','gd-platform-arrow')}
+ ${phaseToken('M607 128 V202 H468',1,6)}
+ ${phaseToken('M466 221 H683 V239 H744',2,6)}${phaseToken('M950 270 V328',2,6)}
+ ${phaseToken('M746 362 H667 V550 H468',3,6)}
+ ${phaseToken('M138 320 V330 H25 V559 H32',4,6)}${phaseToken('M466 575 H594 V477 H744',4,6)}${phaseToken('M950 664 V598',4,6)}
+ ${phaseToken('M746 591 H699 V696 H468',5,6)}
+ </svg>`;
+}
+
 export function guideDiagram(kind) {
   return `<figure class="guide-diagram" data-guide-diagram="${kind}" data-step="0">
     <div class="gd-toolbar"><span class="gd-heading">${headings[kind]}</span><div class="gd-controls" role="group" aria-label="Diagram animation">
@@ -250,9 +307,9 @@ export function guideDiagram(kind) {
       <button type="button" data-guide-next aria-label="Next step">Step →</button>
       <button type="button" data-guide-replay aria-label="Replay animation">↺</button>
     </div></div>
-    <div class="gd-legend"><span class="gd-legend-host">Host / management</span><span class="gd-legend-dpu">DPU infrastructure</span><span class="gd-legend-flow">${['fleet','rollout'].includes(kind) ? 'Management step' : kind === 'tenants' ? 'Tenant paths / blocked attempt' : kind === 'servicePaths' ? 'Packet (coral) / inspection (purple)' : kind === 'modes' || kind === 'manual' ? 'Data packet' : 'Provisioning step'}</span></div>
+    <div class="gd-legend"><span class="gd-legend-host">Host / management</span><span class="gd-legend-dpu">DPU infrastructure</span><span class="gd-legend-flow">${['control','fleet','rollout'].includes(kind) ? 'Management step' : kind === 'tenants' ? 'Tenant paths / blocked attempt' : kind === 'servicePaths' ? 'Packet (coral) / inspection (purple)' : kind === 'modes' || kind === 'manual' ? 'Data packet' : 'Provisioning step'}</span></div>
     ${kind === 'manual' ? '<p class="gd-path-key">Dashed arrows: management / configuration. Solid arrows: data forwarding. Playback explains the lifecycle; CLI progress is tracked below.</p>' : ''}
-    <div class="gd-scroll" role="region" tabindex="0" aria-label="${headings[kind]} diagram; scroll horizontally on small screens">${kind === 'fleet' ? fleetDrawing() : kind === 'tenants' ? tenantsDrawing() : kind === 'rollout' ? rolloutDrawing() : kind === 'servicePaths' ? servicePathsDrawing() : kind === 'modes' ? modeDrawing() : kind === 'manual' ? manualDrawing() : softwareDrawing()}</div>
+    <div class="gd-scroll" role="region" tabindex="0" aria-label="${headings[kind]} diagram; scroll horizontally on small screens">${kind === 'control' ? controlDrawing() : kind === 'fleet' ? fleetDrawing() : kind === 'tenants' ? tenantsDrawing() : kind === 'rollout' ? rolloutDrawing() : kind === 'servicePaths' ? servicePathsDrawing() : kind === 'modes' ? modeDrawing() : kind === 'manual' ? manualDrawing() : softwareDrawing()}</div>
     <p class="gd-scroll-hint">Swipe the diagram sideways to explore it. Keyboard: focus it and use the arrow keys.</p>
     <figcaption><strong data-guide-step></strong><p data-guide-caption aria-live="polite"></p></figcaption>
   </figure>`;

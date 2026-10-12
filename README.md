@@ -15,7 +15,7 @@ edit files to follow them.
 | DPU 101 | Learn what is inside a DPU and how its OS differs from the host OS. |
 | DPU vs NIC mode | Play, pause and step through control ownership and packet flow. |
 | OS → containers | Follow BFB provisioning, Arm Linux boot, cluster join and services. |
-| DPF service rollout | Present ten visual scenes: NVL72 racks, fleet YAML changes, tenant isolation, service examples, animations and speaker notes. |
+| DPF service rollout | Present eleven visual scenes: Kubernetes-to-DPU installation, GB300 NVL72 racks, fleet YAML changes, tenant isolation, animations and speaker notes. |
 | Why DPF? | Understand the motivation, where DPF helps, and how it coordinates DPU provisioning and services. |
 | Manual DPU → HBN | Practice Linux-style commands from an existing Arm OS through BFB, HBN and host restrictions. |
 | BF4 installation differences | Compare BFB/RShim with BF4 BMC, ISO and PLDM flows, then inspect the NICo/DPF configuration. |

@@ -8,7 +8,7 @@ try {
  page.on('pageerror',e=>errors.push(e.message));
  page.on('request',r=>{if(r.method()!=='GET')writes.push(r.url());});
  page.on('websocket',s=>sockets.push(s.url()));
- await page.goto(base+'/sa-demo#fleet');
+ await page.goto(base+'/sa-demo#selection');
  await page.getByRole('button',{name:'Detailed telemetry',exact:true}).click();
  assert.match(await page.locator('#sa-fleet-intent').innerText(),/detailed telemetry/);
  await page.getByRole('button',{name:'Play animation',exact:true}).click();

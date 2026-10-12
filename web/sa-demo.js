@@ -19,7 +19,7 @@ function render(focus=false) {
  $('sa-slide').dataset.slide=slide.id;
  $('sa-slide').innerHTML=`<h1 id="sa-title" tabindex="-1">${slide.title}</h1><p class="sa-lead">${slide.lead}</p>${slide.body()}`;
  diagrams=mountGuideDiagrams($('sa-slide'));
- if(slide.id==='fleet')showFleetProfile('baseline');
+ if(slide.id==='selection')showFleetProfile('baseline');
  if(slide.id==='services')showService('hbn');
  $('sa-counter').textContent=`${index+1} / ${slides.length} · ${slide.label}`;
  $('sa-prev').disabled=index===0;$('sa-next').disabled=index===slides.length-1;

@@ -1,7 +1,7 @@
 DPF SA PRESENTATION
 
 Open http://localhost:8780/sa-demo after starting the course.
-Ten linked scenes explain why DPF exists, the DPU/DOCA/DPF layers, service
+Eleven linked scenes explain why DPF exists, the DPU/DOCA/DPF layers, service
 examples, an NVL72 rack, fleet YAML, tenant isolation, rollout, service behavior,
 lifecycle changes and new-service integration.
 
@@ -42,15 +42,15 @@ https://networking-docs.nvidia.com/dpf/26.4.0/doca-telemetry-service
 https://networking-docs.nvidia.com/dpf/26.4.0/dpuservice-development-guide
 
 NVL72 / FLEET / TENANTS
-Direct links: /sa-demo#rack, /sa-demo#fleet, /sa-demo#tenants.
-The hardware example is DGX GB200 NVL72: 18 compute trays, 72 GPUs, 36 CPUs,
-and 36 BlueField-3 DPUs (two per tray). Other NVL72 designs have different DPU
+Direct links: /sa-demo#rack, /sa-demo#fleet, /sa-demo#selection, /sa-demo#tenants.
+The hardware example is GB300 NVL72 AI Factory reference design: 18 compute trays, 72 GPUs, 36 CPUs,
+and 18 BlueField-3 DPUs (one per tray). Other NVL72 designs have different DPU
 counts. This is a conceptual DPF overlay, not proof of a validated DGX deployment.
 
-The telemetry demonstration selects two east racks in one DPF management domain;
+The #selection telemetry demonstration selects two east racks in one DPF management domain;
 a west rack is excluded. Select Baseline or Detailed telemetry, open the full
 YAML, then use Play or Step. Only spec.services.dts.serviceConfiguration changes.
-No API requests or live installations are made. Two racks x 36 DPUs = 72 example
+No API requests or live installations are made. Two racks x 18 DPUs = 36 example
 targets; this is not a supported scale limit or measured rollout result.
 
 Prepared dependency names and demo.example.com labels are fictional. Inventory,
@@ -84,3 +84,34 @@ https://networking-docs.nvidia.com/dpf/26.4.0/ovn-vpc-service-deployment-guide
 https://github.com/NVIDIA/doca-platform/blob/v26.4.0/api/dpuservice/v1alpha1/dpudeployment_types.go
 https://github.com/NVIDIA/doca-platform/blob/v26.4.0/api/provisioning/v1alpha1/dpuset_types.go
 The OVN VPC alternative is explicitly tech preview in DPF 26.4.0.
+
+KUBERNETES-TO-DPU LIFECYCLE
+/sa-demo#fleet shows a three-node management Kubernetes cluster on the left,
+a separate server host OS and BlueField-3 DPU on the right. DPF's Zero Trust
+provisioning goes through BMC/Redfish. The compatible full BFB provides the Arm
+OS/firmware/DOCA baseline; Arm Linux joins the DPU Kubernetes cluster, whose
+control plane is hosted by Kamaji in this example. Argo CD synchronizes the
+service workloads; DPU runtime image pulls and container execution are separate
+from BFB installation. No service compatibility or production readiness is
+implied by the animation. HBN, Argus and telemetry each need configuration.
+Tower remains unverified until the product/reference is clarified.
+
+The left component grouping is logical scheduling across three management
+nodes, not fixed pod placement, mandatory replica counts or a complete HA design.
+Required prerequisites, replaceable default cluster/storage providers and
+optional monitoring are distinguished in the expanded prerequisite table.
+Production validation includes isolation, certificates, access, service tests,
+capacity, observability, recovery and upgrades. Green pods alone are insufficient.
+
+/sa-demo#layers follows the user's software-stack illustration. The exact source
+PNG is preserved in web/images/software-stack-reference.png and can be expanded
+on that page. Original upload: /tmp/Screenshot 2026-10-12 at 19.17.29.png.
+The editable explanation qualifies model/release-dependent BFB contents, DOCA
+compatibility and HBN restrictions rather than treating source shorthand as a
+universal hardware guarantee.
+
+Updated hardware reference:
+https://docs.nvidia.com/enterprise-reference-architectures/nvl72-ai-factory/latest/components.html
+Platform and prerequisites:
+https://networking-docs.nvidia.com/dpf/26.4.0/helm-prerequisites
+https://networking-docs.nvidia.com/dpf/26.4.0/component-description

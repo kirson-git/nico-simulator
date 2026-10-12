@@ -12,13 +12,33 @@ try {
  await page.getByRole('heading',{name:'One DPU is a project. A fleet needs a platform.'}).waitFor();
  assert.equal(await page.locator('#sa-prev').isDisabled(),true);
  assert.ok(await page.locator('#sa-slide img').evaluate(el=>el.complete&&el.naturalWidth>0));
- for(const id of ['rack','fleet','tenants','layers','services','rollout','paths','lifecycle','future']) {
+ for(const id of ['rack','fleet','selection','tenants','layers','services','rollout','paths','lifecycle','future']) {
    await page.locator(`#sa-topics a[href="#${id}"]`).click();
    await page.waitForFunction(id=>document.querySelector('#sa-slide').dataset.slide===id,id);
    await page.screenshot({path:`/test/sa-scene-${id}.png`,fullPage:true});
  }
  assert.equal(await page.locator('#sa-next').isDisabled(),true);
+ await page.locator('#sa-topics a[href="#rack"]').click();
+ await page.waitForFunction(()=>document.querySelector('#sa-slide').dataset.slide==='rack');
+ assert.equal(await page.locator('.sa-tray em').count(),18);
+ assert.ok((await page.locator('.sa-tray em').allTextContents()).every(text=>text==='1 DPU'));
+ assert.match(await page.locator('#sa-slide').innerText(),/GB300/);
  await page.locator('#sa-topics a[href="#fleet"]').click();
+ await page.waitForFunction(()=>document.querySelector('#sa-slide').dataset.slide==='fleet');
+ assert.equal(await page.locator('[data-management-node]').count(),3);
+ assert.ok(await page.locator('.gd-scroll').evaluate(el=>el.scrollWidth<=el.clientWidth),'Full diagram fits desktop');
+ for(let step=1;step<=5;step++){
+   await page.getByRole('button',{name:'Next step',exact:true}).click();
+   assert.equal(await page.locator('[data-guide-diagram]').getAttribute('data-step'),String(step));
+ }
+ await page.screenshot({path:'/test/sa-fleet-ready.png',fullPage:true});
+ await page.locator('.sa-platform-details > summary').first().click();
+ for(const word of ['cert-manager','Argo CD','Kamaji','Node Feature Discovery','Maintenance Operator'])assert.ok((await page.locator('#sa-slide').innerText()).includes(word));
+ await page.locator('#sa-topics a[href="#layers"]').click();
+ await page.waitForFunction(()=>document.querySelector('#sa-slide').dataset.slide==='layers');
+ await page.locator('.sa-source-image summary').click();
+ assert.ok(await page.locator('.sa-source-image img').evaluate(el=>el.complete&&el.naturalWidth>0));
+ await page.locator('#sa-topics a[href="#selection"]').click();
  await page.locator('.sa-yaml-full > summary').click();
  const before=await page.locator('#sa-fleet-yaml').innerText();
  await page.getByRole('button',{name:'Play animation',exact:true}).click();
@@ -28,7 +48,7 @@ try {
  assert.equal(await page.locator('[data-guide-diagram]').getAttribute('data-step'),'0');
  await page.screenshot({path:'/test/sa-fleet-yaml.png',fullPage:true});
  assert.equal(after,before.replace('telemetry-baseline','telemetry-detailed'),'Only the service configuration reference changes');
- assert.ok((await page.locator('#sa-fleet-intent').innerText()).includes('72 DPUs'));
+ assert.ok((await page.locator('#sa-fleet-intent').innerText()).includes('36 DPUs'));
  assert.equal(await page.locator('[data-rack-selected="true"]').count(),2);
  assert.equal(await page.locator('[data-rack-selected="false"]').count(),1);
  await page.getByRole('button',{name:'Baseline telemetry',exact:true}).click();
@@ -44,7 +64,7 @@ try {
  await page.keyboard.press('ArrowRight');
  await page.waitForFunction(()=>document.querySelector('#sa-slide').dataset.slide==='rollout',null,{timeout:3000});
  await page.keyboard.press('Escape');assert.equal(await page.locator('body').getAttribute('data-presenting'),'false');
- for(const id of ['fleet','tenants','rollout','paths']) {
+ for(const id of ['fleet','selection','tenants','rollout','paths']) {
    await page.locator(`#sa-topics a[href="#${id}"]`).click();
    const diagram=page.locator('[data-guide-diagram]');
    assert.equal(await diagram.locator('svg').evaluate(el=>el.animationsPaused()),true);
@@ -85,10 +105,10 @@ try {
    }
    await page.screenshot({path:`/test/sa-mobile-${width}.png`,fullPage:true});
  }
- for(const id of ['rack','fleet','tenants']) {
+ for(const id of ['layers','rack','fleet','selection','tenants']) {
    await page.goto('http://127.0.0.1:8780/sa-demo#'+id);
    await page.waitForFunction(id=>document.querySelector('#sa-slide').dataset.slide===id,id);
-   if(id==='fleet')await page.locator('.sa-yaml-full > summary').click();
+   if(id==='selection')await page.locator('.sa-yaml-full > summary').click();
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),id+' mobile overflow');
    await page.screenshot({path:`/test/sa-${id}-390.png`,fullPage:true});
  }
