@@ -6,6 +6,7 @@ export const introTopics = [
 ];
 const groups = [
   ['01b', 'Manual DPU → HBN', '/manual-dpu', 'Simulated CLI'],
+  ['01c', 'BF4 installation differences', '/manual-dpu#bf4-compatibility', 'BF3 vs BF4'],
   ['02', 'Kubernetes basics', '/kubernetes', 'Hands-on'],
   ['03', 'Prerequisites', null, 'Planned'],
   ['04', 'DPF operator', null, 'Planned'],
@@ -32,6 +33,16 @@ if (root) {
     if (!narrow.matches) event.preventDefault();
   });
   root.addEventListener('click', event => {
+    const link = event.target.closest('a');
+    if (link && event.button === 0 && !event.ctrlKey && !event.metaKey && !event.shiftKey && !event.altKey) {
+      const url = new URL(link.href);
+      if (url.pathname === location.pathname && !url.hash && location.hash) {
+        // Return from an in-page topic without discarding the lesson state.
+        event.preventDefault();
+        location.hash = '';
+        window.scrollTo({top:0});
+      }
+    }
     if (event.target.closest('a') && narrow.matches) {
       menu.open = false;
       summary.focus({preventScroll: true});
@@ -43,9 +54,13 @@ if (root) {
 export function updateCourseNav() {
   if (!root) return;
   const activeHash = introTopics.some(([id]) => location.hash === `#${id}`) ? location.hash : '#what-is-dpu';
+  const sectionMatch = [...root.querySelectorAll('a')].some(link => {
+    const url = new URL(link.href);
+    return url.pathname === location.pathname && url.hash && url.hash === location.hash;
+  });
   for (const link of root.querySelectorAll('a')) {
     const url = new URL(link.href);
-    const active = url.pathname === location.pathname && (url.pathname !== '/' || url.hash === activeHash);
+    const active = url.pathname === location.pathname && (url.pathname === '/' ? url.hash === activeHash : sectionMatch ? url.hash === location.hash : !url.hash);
     if (active) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }

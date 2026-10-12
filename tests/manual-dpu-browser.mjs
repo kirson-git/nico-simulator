@@ -11,6 +11,19 @@ try {
   await page.getByRole('heading',{name:'One DPU. From OS to HBN.'}).waitFor();
   assert.equal(await page.locator('[data-course-nav] a[aria-current="page"]').getAttribute('href'),'/manual-dpu');
   assert.match(await page.locator('.manual-boundary').innerText(),/not a verified BF4/);
+  const bf4Link=page.locator('[data-course-nav] a[href="/manual-dpu#bf4-compatibility"]');
+  await bf4Link.click();
+  await page.locator('[data-course-nav] a[href="/manual-dpu#bf4-compatibility"][aria-current="page"]').waitFor();
+  assert.equal(await page.locator('[data-course-nav] a[aria-current="page"]').getAttribute('href'),'/manual-dpu#bf4-compatibility');
+  assert.match(await page.locator('#bf4-compatibility').innerText(),/full card power cycle/i);
+  await page.locator('.bf4-config summary').click();
+  assert.match(await page.locator('.bf4-config pre').innerText(),/bluefield_software.pldm_fw_bundle/);
+  await page.locator('#bf4-compatibility').evaluate(el=>el.scrollIntoView({block:'start'}));
+  await page.screenshot({path:'/test/bf4-installation-desktop.png'});
+  await page.goBack();
+  await page.locator('[data-course-nav] a[href="/manual-dpu"][aria-current="page"]').waitFor();
+  assert.equal(await page.locator('[data-course-nav] a[aria-current="page"]').getAttribute('href'),'/manual-dpu');
+  await page.evaluate(()=>window.scrollTo(0,0));
   assert.ok(await page.locator('#manual-next').isDisabled());
   const terminalBox=await page.locator('.manual-terminal').boundingBox();
   const explanationBox=await page.locator('.manual-step').boundingBox();
@@ -48,6 +61,15 @@ try {
     assert.equal(await page.locator('#manual-title').innerText(),title, 'Explanation must stay until Next');
     assert.ok(await page.locator('#manual-load').isDisabled());
     if(i===0){
+      const transcriptBefore=await page.locator('#manual-console').innerText();
+      await bf4Link.click();
+      await page.getByRole('link',{name:'Return to the BF3 terminal exercise'}).click();
+      assert.equal(await page.locator('#manual-console').innerText(),transcriptBefore);
+      await bf4Link.click();
+      await page.locator('[data-course-nav] a[href="/manual-dpu"]').click();
+      await page.locator('[data-course-nav] a[href="/manual-dpu"][aria-current="page"]').waitFor();
+      assert.equal(await page.locator('#manual-console').innerText(),transcriptBefore);
+
       await page.locator('#manual-input').fill('cat /etc/os-release');
       await page.getByRole('button',{name:'Run command',exact:true}).click();
       assert.match(await page.locator('#manual-progress').innerText(),/^1 \/ 18/);
@@ -86,6 +108,7 @@ try {
   assert.equal(await diagram.getAttribute('data-step'),'1');
   assert.equal(await diagram.locator('svg').evaluate(el=>el.animationsPaused()),true);
   await page.locator('.manual-recovery summary').click();
+  await page.locator('.bf4-config summary').click();
   for(const width of [820,390]) {
     await page.setViewportSize({width,height:844});
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
@@ -94,6 +117,10 @@ try {
     await page.evaluate(()=>window.scrollTo(0,0));
     await page.screenshot({path:`/test/manual-dpu-${width}.png`,fullPage:true});
   }
+  await page.goto('http://127.0.0.1:8780/manual-dpu#bf4-compatibility');
+  await page.reload();
+  await page.locator('#course-menu > summary').click();
+  assert.equal(await page.locator('[data-course-nav] a[aria-current="page"]').getAttribute('href'),'/manual-dpu#bf4-compatibility');
   assert.deepEqual(errors,[]);assert.deepEqual(writes,[]);assert.deepEqual(sockets,[]);assert.deepEqual(external,[]);
   console.log('PASS: manual CLI, 18 checks, terminal guards, NIC reset, transcript, safe text rendering, mobile/reduced motion; no network mutations or real terminal.');
 } finally {await browser.close();}

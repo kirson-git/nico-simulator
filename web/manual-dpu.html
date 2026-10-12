@@ -9,7 +9,7 @@
 <div class="chapter-meta"><span>BEFORE DPF · MANUAL LIFECYCLE</span><span>BLUEFIELD-3 TEACHING PROFILE</span></div>
 <h1>One DPU. From OS to HBN.</h1>
 <p class="manual-boundary"><strong>BF3 practice — not a verified BF4 installation.</strong> All commands are simulated. <a href="#bf4-compatibility">What changes for BlueField-4?</a></p>
-<section class="manual-practice" aria-label="Guided Linux-style console">
+<section id="manual-practice" class="manual-practice" aria-label="Guided Linux-style console">
 <div class="manual-status" id="manual-status" aria-label="Simulated component status"></div>
 <div class="manual-terminal"><div class="manual-terminal-head"><label for="manual-target">Terminal</label><select id="manual-target"><option value="host">Host · x86 Linux</option><option value="arm">DPU · Arm Linux</option><option value="hbn">HBN · container shell</option><option value="management">Management · BMC access</option></select><span>SIMULATION</span></div>
 <pre id="manual-console" role="log" aria-live="polite" aria-relevant="additions text" tabindex="0"></pre>
@@ -26,10 +26,53 @@
 <div class="switcher"><button id="manual-check" type="button">Check my work</button><button id="manual-export" type="button">Download simulated transcript</button><button id="manual-reset" type="button">Reset lesson</button></div>
 <details><summary>All steps and evidence</summary><ol id="manual-steps"></ol></details>
 </section>
-<section id="bf4-compatibility" class="manual-compatibility" aria-labelledby="bf4-heading"><h2 id="bf4-heading">Is this the BlueField-4 procedure?</h2>
-<p><strong>No. This console rehearses a BlueField-3 workflow.</strong> The general ideas carry over: the DPU has its own OS, containers need configuration, and independent management must survive host restrictions. Device IDs, provisioning artifacts and commands must match the hardware and software release.</p>
-<p>In NVIDIA’s documented <a href="https://docs.nvidia.com/infra-controller/documentation/getting-started/installation-options/dpf-setup" target="_blank" rel="noopener noreferrer">NICo/DPF BF4 provisioning flow</a>, the OS comes from an ISO and firmware from PLDM bundles selected by PSID (the adapter’s firmware compatibility identifier). That differs from the BF3 BFB-over-RShim exercise here. This comparison is specific to that documented integration, not a universal manual BF4 installation recipe.</p>
-<p>The <a href="https://networking-docs.nvidia.com/doca/archive/3-4-0/hbn-service-release-notes" target="_blank" rel="noopener noreferrer">HBN 3.4 validated platform list</a> names BF2/BF3, not BF4. It is insufficient evidence to label these HBN commands BF4-validated. A BF4 practical lesson needs a matched OS, firmware and HBN release with its installation reference.</p></section>
+<section id="bf4-compatibility" class="manual-compatibility" aria-labelledby="bf4-heading">
+<div class="chapter-meta"><span>INSTALLATION COMPARISON</span><span>READING · 3 MIN</span></div>
+<h2 id="bf4-heading">BF4: what changes during installation?</h2>
+<p><strong>Goal:</strong> distinguish the DPU OS, firmware and service containers, then choose the installation path for the correct generation. The console above remains a BF3 rehearsal; this section explains BF4 differences.</p>
+<div class="bf4-flow" aria-label="Installation paths compared">
+<section><h3>BF3 exercise above</h3><ol><li>Host with BFB + bf.cfg</li><li>RShim transfer to the DPU</li><li>Arm OS boots; configure HBN separately</li></ol></section>
+<section><h3>BF4 DPU mode · DMS 3.5</h3><ol><li>Controller with ISO / PLDM</li><li>DPU BMC manages installation</li><li>Verify OS and activated firmware, then services</li></ol></section>
+</div>
+<p>The BF4 path shown here follows <a href="https://networking-docs.nvidia.com/doca/archive/3-5-0/doca-management-service-guide" target="_blank" rel="noopener noreferrer">DOCA 3.5 DMS provisioning, section 7</a>. DMS is the management tool; DPF is the Kubernetes orchestration framework.</p>
+<div class="table-wrap" role="region" aria-label="BF3 and BF4 installation differences" tabindex="0"><table><thead><tr><th scope="col">Question</th><th scope="col">BF3 exercise</th><th scope="col">BF4 DPU mode in DMS 3.5</th></tr></thead><tbody>
+<tr><th scope="row">Installation files?</th><td>BFB bundle and prepared bf.cfg.</td><td>ISO for the OS; PLDM for firmware; a combined operation is supported.</td></tr>
+<tr><th scope="row">Who installs?</th><td>The host pushes through RShim.</td><td>The controller contacts the DPU BMC. The BMC handles media and boot.</td></tr>
+<tr><th scope="row">Network requirement?</th><td>This exercise models a local RShim transfer.</td><td>Controller → BMC; BMC → ISO source. Test both paths.</td></tr>
+<tr><th scope="row">When is firmware active?</th><td>Follow the selected bundle’s reset requirements.</td><td>Full card power cycle after PLDM completes; an Arm reset is insufficient.</td></tr>
+</tbody></table></div>
+<h3>Follow the BF4 installation in four stages</h3>
+<ol class="bf4-stages">
+<li><strong>Identify.</strong> Match adapter and BMC; check firmware and artifact compatibility.</li>
+<li><strong>Install.</strong> BMC fetches a locally served or remote HTTPS ISO; optional CIDATA supplies cloud-init.</li>
+<li><strong>Observe and activate.</strong> An accepted request is not completion. Follow the operation result, then perform the required PLDM activation power cycle.</li>
+<li><strong>Verify.</strong> Check the running OS, firmware and management access before configuring service containers.</li>
+</ol>
+<p><strong>NIC mode is different:</strong> DMS 3.5 describes a local PLDM firmware update through MFT/MST, without the DPU BMC. That is not an Arm OS installation.</p>
+<div class="callout"><strong>Keep the two computers separate.</strong> The BlueField OS ISO targets the DPU’s Arm computer. It does not install Ubuntu on the x86 server. HBN is another layer: booting an OS does not prove that HBN is running or forwarding traffic.</div>
+<h3>What changes when NICo uses DPF?</h3>
+<p>In the <a href="https://docs.nvidia.com/infra-controller/documentation/getting-started/installation-options/dpf-setup" target="_blank" rel="noopener noreferrer">documented NICo/DPF integration</a>, BF3 selects <code>bfb_url</code>. BF4 instead selects <code>bluefield_software</code>: an OS ISO plus a non-empty map from PSID (Parameter Set ID) to firmware bundle URL. Do not set both selectors.</p>
+<details class="bf4-config"><summary>Inspect the prepared BF4 configuration excerpt</summary>
+<p><strong>TOML, not Kubernetes YAML.</strong> This is a partial NICo configuration example with fictional URLs and PSID. It is for reading only; no file editing or deployment is part of this lesson.</p>
+<pre><code>[dpf.deployments.bf4_generic]
+flavor_name = "training-bf4-flavor"
+deployment_name = "training-bf4"
+node_label_key = "training.example.com/bf4"
+
+[dpf.deployments.bf4_generic.bluefield_software]
+os_iso = "https://images.example.com/bf4-os.iso"
+
+[dpf.deployments.bf4_generic.bluefield_software.pldm_fw_bundle]
+"EXAMPLE_PSID" = "https://images.example.com/bf4-firmware.pldm"</code></pre>
+<p>NICo consumes these settings and orchestrates DPF resources; the DPU does not read this TOML file. Each deployment needs distinct deployment, flavor and node-label identifiers. PSID selects the matching firmware, not a tenant.</p>
+</details>
+<p><strong>Generic BF4 and BF4 Astra differ:</strong> generic BF4 uses <code>DPUFlavor</code>; Astra uses <code>DPUFlavorTemplate</code> and requires the documented Spectrum-X runtime ConfigMap before activation. Choose the appropriate deployment profile.</p>
+<h3>What carries over from the terminal exercise?</h3>
+<p>Keep the habit of checking identity, installation completion, service health, forwarding and independent management separately. Revalidate device paths, mode/reset commands, manifests and host restrictions for BF4; the BF3 command list is not a BF4 recipe.</p>
+<p>The <a href="https://networking-docs.nvidia.com/doca/archive/3-4-0/hbn-service-release-notes" target="_blank" rel="noopener noreferrer">HBN 3.4 validated platform list</a> names BF2/BF3. That list does not validate this lesson’s standalone HBN commands for BF4. Select the HBN release and deployment guide for your BF4 platform.</p>
+<p><strong>Outcome:</strong> you can explain why copying the BF3 BFB command is insufficient for this BF4 flow, and why “OS installed,” “firmware active” and “HBN working” are separate checks.</p>
+<a href="#manual-practice">Return to the BF3 terminal exercise ↑</a>
+</section>
 <details class="manual-background"><summary>DPU recap, goal and animated flow</summary>
 <p class="lead"><strong>What is a DPU?</strong> A network adapter with its own Arm computer, memory, operating system and networking hardware. The server runs its host OS; the DPU runs a separate Arm OS. A BMC provides a separate management path.</p>
 <div class="manual-goals"><section><h2>Your goal</h2><p>Understand each manual step before learning how DPF automates it. Identify where a command runs and what it changes.</p></section><section><h2>Your outcome</h2><p>A simulated DPU with a verified BFB-installed OS, checked HBN services, a tested sample route, restricted host access and working independent management.</p></section></div>

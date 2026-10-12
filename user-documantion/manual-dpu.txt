@@ -68,3 +68,14 @@ https://networking-docs.nvidia.com/doca/archive/3-4-0/hbn-service-release-notes
 LAYOUT
 Terminal first, current-step explanation below. A successful check stays visible
 until Next step. DPU recap, goals and animation are expandable below the exercise.
+
+BF4 INSTALLATION COMPARISON (2026-10-12)
+Open http://localhost:8780/manual-dpu#bf4-compatibility or select
+BF4 installation differences in the sidebar. The lesson compares the BF3
+exercise with the BF4 DPU-mode flow documented for DMS 3.5, then explains
+NICo/DPF artifact selection. It includes a visual path, comparison table,
+four stages, a prepared TOML excerpt and separate OS/firmware/HBN outcomes.
+The BF3 command simulator is unchanged. BF4 content is a reading exercise,
+not a runnable deployment; all example identities and URLs are fictional.
+Source for DMS installation paths and activation:
+https://networking-docs.nvidia.com/doca/archive/3-5-0/doca-management-service-guide

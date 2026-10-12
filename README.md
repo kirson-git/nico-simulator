@@ -16,6 +16,7 @@ edit files to follow them.
 | DPU vs NIC mode | Play, pause and step through control ownership and packet flow. |
 | OS → containers | Follow BFB provisioning, Arm Linux boot, cluster join and services. |
 | Manual DPU → HBN | Practice Linux-style commands from an existing Arm OS through BFB, HBN and host restrictions. |
+| BF4 installation differences | Compare BFB/RShim with BF4 BMC, ISO and PLDM flows, then inspect the NICo/DPF configuration. |
 | Kubernetes basics | Use a real Bash terminal, apply a prepared Europe example, check progress and reset the exercise. |
 | DPU configuration | Inspect eight complete YAMLs and see what each field affects. |
 | Host Ubuntu | Rehearse virtual ISO mounting and an automatic installation in the browser. |
