@@ -1,6 +1,18 @@
 // The l-csi guide's visual grammar: colored domains, labeled arrows and SVG motion.
 // Course concepts only; these diagrams do not represent live deployment status.
 const descriptions = {
+  fleet: [
+    'Change the DPUDeployment service configuration reference in the management API. The BFB, flavor, template and both telemetry profiles already exist. This is simulated intent.',
+    'Match inventory labels: fleet=east on DPUNodes and managed=true on DPUDevices. Rack 01 and Rack 02 are selected; Rack 03 is outside the selection. The DPUCluster label selects infra-east.',
+    'Controllers reconcile the referenced service configuration onto provisioned DPU workers. Updates follow their configured policies; this is not a simultaneous all-rack transaction.',
+    'Review controller conditions and verify telemetry at the collector. An unavailable DPU or failed service requires investigation. No live success or scale benchmark is claimed here.',
+  ],
+  tenants: [
+    'The operator uses DPF to deliver the HBN service and its prepared configuration. Management access is separate from customer traffic and protected by identity, RBAC and host restrictions.',
+    'Europe traffic follows its assigned interfaces, VRF and VXLAN VNI across the fabric to another Europe rack. HBN configures hardware forwarding; packets do not traverse DPF.',
+    'Asia uses a separate interface assignment, VRF and VNI. Configure fabric routing and route-target policy consistently at both ends.',
+    'The intended negative test: Europe cannot reach Asia without explicitly authorized connectivity. Verify this with real traffic. Separate storage, compute-fabric and GPU controls must also enforce tenant ownership.',
+  ],
   rollout: [
     'Declare the selected DPUs, service templates and configuration through the management Kubernetes API. This is authored playback, not a live deployment.',
     'Controllers resolve the declared dependencies. In the documented architecture, the service controller uses Argo CD to synchronize chart-based workloads; container images come from a registry.',
@@ -30,8 +42,8 @@ const descriptions = {
     'Only after the OS and cluster are ready can DPF deploy service containers onto the DPU. HBN is one example; it still needs its own configuration.',
   ],
 };
-const headings = {rollout: 'From declared intent to service pods', servicePaths: 'Two services. Two different jobs.', manual: 'Host, DPU and network: who does what?', modes: 'Same card. Different control owner.', software: 'From a bare DPU to running services'};
-const stageNames = {rollout: ['Declare', 'Resolve and synchronize', 'Deploy on selected DPUs', 'Verify the outcome'], servicePaths: ['Forward traffic', 'Inspect memory', 'Export security events'], manual: ['Identify the systems', 'Install the BFB', 'Run HBN and forward', 'Restrict and retain management'], modes: ['Control ownership', 'Hardware forwarding', 'Out to the network'], software: ['Provision', 'Boot the OS', 'Join the cluster', 'Deploy services']};
+const headings = {fleet: 'One intent → selected racks → verified outcome', tenants: 'Two tenants across four reserved racks', rollout: 'From declared intent to service pods', servicePaths: 'Two services. Two different jobs.', manual: 'Host, DPU and network: who does what?', modes: 'Same card. Different control owner.', software: 'From a bare DPU to running services'};
+const stageNames = {fleet: ['Change the profile', 'Select the fleet', 'Reconcile the service', 'Verify and investigate'], tenants: ['Deliver configuration', 'Europe to Europe', 'Asia to Asia', 'Test the tenant boundary'], rollout: ['Declare', 'Resolve and synchronize', 'Deploy on selected DPUs', 'Verify the outcome'], servicePaths: ['Forward traffic', 'Inspect memory', 'Export security events'], manual: ['Identify the systems', 'Install the BFB', 'Run HBN and forward', 'Restrict and retain management'], modes: ['Control ownership', 'Hardware forwarding', 'Out to the network'], software: ['Provision', 'Boot the OS', 'Join the cluster', 'Deploy services']};
 const label = (x, y, text, cls = 'gd-text', anchor = 'middle') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${text}</text>`;
 const box = (x, y, w, h, title, sub, cls = '') => `<g class="gd-box ${cls}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>${label(x+w/2, y+28, title)}${sub ? label(x+w/2, y+51, sub, 'gd-small') : ''}</g>`;
 const badge = (x,y,n) => `<circle cx="${x}" cy="${y}" r="14" class="gd-number"/>${label(x,y+6,n,'gd-number-text')}`;
@@ -181,6 +193,56 @@ function servicePathsDrawing() {
   </svg>`;
 }
 
+function fleetDrawing() {
+ const rack=(x,n,selected)=>`<g data-rack-selected="${selected}" class="${selected?'':'gd-inactive'}">
+  <rect x="${x}" y="196" width="268" height="210" rx="12" class="gd-lane ${selected?'gd-dpu':'gd-management'}"/>
+  ${label(x+134,225,`Rack 0${n}`,'gd-lane-title')}${label(x+134,250,`fleet: ${selected?'east':'west'}`,'gd-small')}
+  ${[0,1,2].map(i=>`<rect x="${x+20}" y="${266+i*19}" width="228" height="12" rx="2" fill="#40505b"/>`).join('')}
+  ${label(x+134,345,'18 trays · 36 BlueField-3 DPUs','gd-small')}
+  <text x="${x+134}" y="380" class="gd-text" text-anchor="middle" ${selected?'data-fleet-desired':''}>${selected?'Desired: baseline':'Outside selection'}</text>
+ </g>`;
+ return `<svg viewBox="0 0 960 452" role="img" aria-label="A YAML change goes to DPF and targets 72 BlueField DPUs in two east racks; the west rack is not selected. Management flow only.">
+ ${defs('gd-fleet-arrow')}
+ ${box(22,20,220,80,'One YAML change','Telemetry profile reference','gd-host')}
+ ${box(339,20,274,80,'DPF management domain','Select · reconcile · observe','gd-services')}
+ ${box(703,20,235,80,'Review the outcome','Conditions + actual metrics','gd-host')}
+ ${arrow('M242 60 H337','gd-control','gd-fleet-arrow')}${arrow('M613 60 H701','gd-control','gd-fleet-arrow')}
+ ${arrow('M440 100 V151 H164 V194','gd-control','gd-fleet-arrow')}
+ ${arrow('M480 100 V194','gd-control','gd-fleet-arrow')}
+ ${label(650,150,'Same management domain','gd-small')}
+ ${rack(30,1,true)}${rack(346,2,true)}${rack(662,3,false)}
+ ${phaseToken('M242 60 H337',0,4)}
+ ${phaseToken('M440 100 V151 H164 V194',1,4)}${phaseToken('M480 100 V194',1,4)}
+ ${phaseToken('M164 266 V312',2,4)}${phaseToken('M480 266 V312',2,4)}
+ ${phaseToken('M613 60 H701',3,4)}
+ ${label(480,435,'Illustrative rollout · rack icons are aggregated · no measured health','gd-small')}
+ </svg>`;
+}
+
+function tenantsDrawing() {
+ const routeA='M236 187 H724', routeB='M236 330 H724';
+ return `<svg viewBox="0 0 960 440" role="img" aria-label="Europe connects racks 01 and 02 through its own VRF and VNI. Asia connects racks 03 and 04 separately. A cross-tenant attempt is blocked. DPF supplies configuration, not workload forwarding.">
+ ${defs('gd-tenant-arrow')}
+ ${box(322,12,316,64,'DPF · operator management','Deploy HBN + configuration','gd-host')}
+ ${arrow('M480 76 V125','gd-control','gd-tenant-arrow')}
+ ${label(655,103,'Configuration path','gd-small')}
+ <rect x="20" y="134" width="920" height="104" rx="12" fill="#172d25" stroke="#56c587"/>
+ <rect x="20" y="277" width="920" height="104" rx="12" fill="#18273b" stroke="#78aae6"/>
+ ${arrow(routeA,'sa-europe-route','gd-tenant-arrow')}${arrow(routeB,'sa-asia-route','gd-tenant-arrow')}
+ ${box(36,151,200,72,'Europe · Rack 01','Reserved compute','gd-tenant')}
+ ${box(330,151,300,72,'HBN · VRF europe','VXLAN VNI 10100','gd-tenant')}
+ ${box(724,151,200,72,'Europe · Rack 02','Same tenant network','gd-tenant')}
+ ${box(36,294,200,72,'Asia · Rack 03','Reserved compute','gd-host')}
+ ${box(330,294,300,72,'HBN · VRF asia','VXLAN VNI 10200','gd-host')}
+ ${box(724,294,200,72,'Asia · Rack 04','Same tenant network','gd-host')}
+ ${arrow('M480 223 V250','gd-packet-route','gd-tenant-arrow')}
+ <path d="M468 249 L492 271 M492 249 L468 271" stroke="#ef7a6c" stroke-width="4"/>
+ ${label(667,263,'No cross-tenant route / policy permission','gd-small')}
+ ${phaseToken('M480 76 V125',0,4)}${phaseToken(routeA,1,4,'sa-europe-token')}${phaseToken(routeB,2,4,'sa-asia-token')}${phaseToken('M480 223 V250',3,4,'gd-packet')}
+ ${label(480,413,'Logical HBN paths across a prepared fabric · illustrative isolation test','gd-small')}
+ </svg>`;
+}
+
 export function guideDiagram(kind) {
   return `<figure class="guide-diagram" data-guide-diagram="${kind}" data-step="0">
     <div class="gd-toolbar"><span class="gd-heading">${headings[kind]}</span><div class="gd-controls" role="group" aria-label="Diagram animation">
@@ -188,9 +250,9 @@ export function guideDiagram(kind) {
       <button type="button" data-guide-next aria-label="Next step">Step →</button>
       <button type="button" data-guide-replay aria-label="Replay animation">↺</button>
     </div></div>
-    <div class="gd-legend"><span class="gd-legend-host">Host / management</span><span class="gd-legend-dpu">DPU infrastructure</span><span class="gd-legend-flow">${kind === 'rollout' ? 'Management step' : kind === 'servicePaths' ? 'Packet (coral) / inspection (purple)' : kind === 'modes' || kind === 'manual' ? 'Data packet' : 'Provisioning step'}</span></div>
+    <div class="gd-legend"><span class="gd-legend-host">Host / management</span><span class="gd-legend-dpu">DPU infrastructure</span><span class="gd-legend-flow">${['fleet','rollout'].includes(kind) ? 'Management step' : kind === 'tenants' ? 'Tenant paths / blocked attempt' : kind === 'servicePaths' ? 'Packet (coral) / inspection (purple)' : kind === 'modes' || kind === 'manual' ? 'Data packet' : 'Provisioning step'}</span></div>
     ${kind === 'manual' ? '<p class="gd-path-key">Dashed arrows: management / configuration. Solid arrows: data forwarding. Playback explains the lifecycle; CLI progress is tracked below.</p>' : ''}
-    <div class="gd-scroll" role="region" tabindex="0" aria-label="${headings[kind]} diagram; scroll horizontally on small screens">${kind === 'rollout' ? rolloutDrawing() : kind === 'servicePaths' ? servicePathsDrawing() : kind === 'modes' ? modeDrawing() : kind === 'manual' ? manualDrawing() : softwareDrawing()}</div>
+    <div class="gd-scroll" role="region" tabindex="0" aria-label="${headings[kind]} diagram; scroll horizontally on small screens">${kind === 'fleet' ? fleetDrawing() : kind === 'tenants' ? tenantsDrawing() : kind === 'rollout' ? rolloutDrawing() : kind === 'servicePaths' ? servicePathsDrawing() : kind === 'modes' ? modeDrawing() : kind === 'manual' ? manualDrawing() : softwareDrawing()}</div>
     <p class="gd-scroll-hint">Swipe the diagram sideways to explore it. Keyboard: focus it and use the arrow keys.</p>
     <figcaption><strong data-guide-step></strong><p data-guide-caption aria-live="polite"></p></figcaption>
   </figure>`;

@@ -1,0 +1,29 @@
+# Presentation example · DPF 26.4.0 API
+# Dependencies and inventory must already be prepared.
+apiVersion: svc.dpu.nvidia.com/v1alpha1
+kind: DPUDeployment
+metadata:
+  name: east-telemetry
+  namespace: dpf-operator-system
+spec:
+  dpus:
+    bfb: qualified-bfb
+    flavor: qualified-flavor
+    nodeEffect:
+      hold: true
+    dpuSetStrategy:
+      type: RollingUpdate
+    dpuSets:
+      - nameSuffix: east
+        dpuNodeSelector:
+          matchLabels:
+            demo.example.com/fleet: east
+        dpuDeviceSelector:
+          matchLabels:
+            demo.example.com/managed: "true"
+        dpuClusterSelector:
+          demo.example.com/cluster: infra-east
+  services:
+    dts:
+      serviceTemplate: qualified-dts
+      serviceConfiguration: telemetry-detailed

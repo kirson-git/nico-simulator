@@ -1,8 +1,9 @@
 DPF SA PRESENTATION
 
 Open http://localhost:8780/sa-demo after starting the course.
-Seven linked scenes explain why DPF exists, the DPU/DOCA/DPF layers, service
-examples, rollout, service behavior, lifecycle changes and new-service integration.
+Ten linked scenes explain why DPF exists, the DPU/DOCA/DPF layers, service
+examples, an NVL72 rack, fleet YAML, tenant isolation, rollout, service behavior,
+lifecycle changes and new-service integration.
 
 CONTROLS
 Use the scene list, Previous/Next or the left/right keyboard arrows.
@@ -39,3 +40,47 @@ https://networking-docs.nvidia.com/dpf/26.4.0/hbn-in-dpf-zero-trust
 https://networking-docs.nvidia.com/dpf/26.4.0/hbn-and-snap-storage-in-dpf-zero-trust
 https://networking-docs.nvidia.com/dpf/26.4.0/doca-telemetry-service
 https://networking-docs.nvidia.com/dpf/26.4.0/dpuservice-development-guide
+
+NVL72 / FLEET / TENANTS
+Direct links: /sa-demo#rack, /sa-demo#fleet, /sa-demo#tenants.
+The hardware example is DGX GB200 NVL72: 18 compute trays, 72 GPUs, 36 CPUs,
+and 36 BlueField-3 DPUs (two per tray). Other NVL72 designs have different DPU
+counts. This is a conceptual DPF overlay, not proof of a validated DGX deployment.
+
+The telemetry demonstration selects two east racks in one DPF management domain;
+a west rack is excluded. Select Baseline or Detailed telemetry, open the full
+YAML, then use Play or Step. Only spec.services.dts.serviceConfiguration changes.
+No API requests or live installations are made. Two racks x 36 DPUs = 72 example
+targets; this is not a supported scale limit or measured rollout result.
+
+Prepared dependency names and demo.example.com labels are fictional. Inventory,
+DPU clusters, credentials, BFB, flavor, service template and both profiles must
+already exist. BFB/flavor/template/profile references share the deployment's
+namespace. Both profiles and template must use deploymentServiceName: dts.
+The complete illustrative object is saved in examples/sa-demo/ below this folder.
+These files are not an installation bundle. The browser has the same prepared
+example; users do not need to edit it. API fields were checked against NVIDIA's
+v26.4.0 Go definitions for DPUDeployment and DPUSet.
+
+nodeEffect.hold: true waits for external maintenance coordination when node
+effect is applied. RollingUpdate controls DPUSet changes; service upgrade policy
+also determines disruption. Neither means automatic zero downtime or rollback.
+Independent DPF management domains require an additional delivery workflow.
+
+The separate Europe/Asia scenario reserves whole racks per tenant: 01-02 for
+Europe, 03-04 for Asia. HBN VRFs, interface assignments, VXLAN VNIs and matching
+EVPN policy provide the illustrated network separation. Same-tenant connectivity
+must pass, cross-tenant access must fail without explicit permission. Management
+identity/RBAC and host restrictions, GPU scheduling, storage permissions and
+compute-fabric isolation are separate controls. DPF deploys desired configuration;
+HBN/fabric policy enforce the data path. Kamaji tenant clusters and namespaces
+alone do not establish these customer boundaries. VXLAN is not encryption.
+
+Additional sources:
+https://docs.nvidia.com/dgx/dgxgb200-user-guide/hardware.html
+https://docs.nvidia.com/dgx/dgxgb200-user-guide/networking.html
+https://networking-docs.nvidia.com/dpf/26.4.0/zero-trust-deployment
+https://networking-docs.nvidia.com/dpf/26.4.0/ovn-vpc-service-deployment-guide
+https://github.com/NVIDIA/doca-platform/blob/v26.4.0/api/dpuservice/v1alpha1/dpudeployment_types.go
+https://github.com/NVIDIA/doca-platform/blob/v26.4.0/api/provisioning/v1alpha1/dpuset_types.go
+The OVN VPC alternative is explicitly tech preview in DPF 26.4.0.

@@ -1,4 +1,5 @@
 import './course-nav.js';
+import {showFleetProfile} from './sa-demo-fleet.js';
 import {slides,services,icon} from './sa-demo-data.js';
 import {mountGuideDiagrams} from './guide-diagrams.js';
 const $=id=>document.getElementById(id);
@@ -18,6 +19,7 @@ function render(focus=false) {
  $('sa-slide').dataset.slide=slide.id;
  $('sa-slide').innerHTML=`<h1 id="sa-title" tabindex="-1">${slide.title}</h1><p class="sa-lead">${slide.lead}</p>${slide.body()}`;
  diagrams=mountGuideDiagrams($('sa-slide'));
+ if(slide.id==='fleet')showFleetProfile('baseline');
  if(slide.id==='services')showService('hbn');
  $('sa-counter').textContent=`${index+1} / ${slides.length} · ${slide.label}`;
  $('sa-prev').disabled=index===0;$('sa-next').disabled=index===slides.length-1;
@@ -31,7 +33,7 @@ function render(focus=false) {
 function move(delta){const next=index+delta;if(next>=0&&next<slides.length)location.hash=slides[next].id;}
 function present(value){document.body.dataset.presenting=String(value);$('sa-present').setAttribute('aria-pressed',String(value));$('sa-present').textContent=value?'Exit presentation':'Presentation mode';}
 $('sa-prev').onclick=()=>move(-1);$('sa-next').onclick=()=>move(1);
-$('sa-slide').addEventListener('click',event=>{const button=event.target.closest('[data-service]');if(button)showService(button.dataset.service);});
+$('sa-slide').addEventListener('click',event=>{const button=event.target.closest('[data-service]');if(button)showService(button.dataset.service);const profile=event.target.closest('[data-fleet-profile]');if(profile)showFleetProfile(profile.dataset.fleetProfile);});
 $('sa-present').onclick=()=>present(document.body.dataset.presenting!=='true');
 $('sa-notes-toggle').onclick=()=>{notesOpen=!notesOpen;$('sa-notes-toggle').setAttribute('aria-expanded',String(notesOpen));$('sa-notes').hidden=!notesOpen;};
 document.addEventListener('keydown',event=>{

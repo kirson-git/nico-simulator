@@ -21,3 +21,9 @@ Validation: all slide/deep-link navigation, service selection, animations and
 cleanup, keyboard/mobile layout, browser-only requests, existing shared diagram
 regressions and existing unit tests. Preview then update course only; keep the
 kind cluster and learner workspace. Publish to the existing simulator repo.
+
+Extension: three bounded scenes for DGX GB200 rack anatomy, one prepared
+telemetry configuration-reference change spanning selected racks, and whole-rack
+Europe/Asia tenancy with HBN network isolation. Keep NVLink/ConnectX separate
+from DPF's DPU scope. Reuse shared playback, show complete illustrative YAML,
+validate selection/profile switching, diagram lifecycle and mobile rendering.

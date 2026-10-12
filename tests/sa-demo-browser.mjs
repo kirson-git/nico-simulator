@@ -12,12 +12,27 @@ try {
  await page.getByRole('heading',{name:'One DPU is a project. A fleet needs a platform.'}).waitFor();
  assert.equal(await page.locator('#sa-prev').isDisabled(),true);
  assert.ok(await page.locator('#sa-slide img').evaluate(el=>el.complete&&el.naturalWidth>0));
- for(const id of ['layers','services','rollout','paths','lifecycle','future']) {
+ for(const id of ['rack','fleet','tenants','layers','services','rollout','paths','lifecycle','future']) {
    await page.locator(`#sa-topics a[href="#${id}"]`).click();
    await page.waitForFunction(id=>document.querySelector('#sa-slide').dataset.slide===id,id);
    await page.screenshot({path:`/test/sa-scene-${id}.png`,fullPage:true});
  }
  assert.equal(await page.locator('#sa-next').isDisabled(),true);
+ await page.locator('#sa-topics a[href="#fleet"]').click();
+ await page.locator('.sa-yaml-full > summary').click();
+ const before=await page.locator('#sa-fleet-yaml').innerText();
+ await page.getByRole('button',{name:'Play animation',exact:true}).click();
+ await page.getByRole('button',{name:'Detailed telemetry',exact:true}).click();
+ const after=await page.locator('#sa-fleet-yaml').innerText();
+ assert.equal(await page.locator('[data-guide-diagram] svg').evaluate(el=>el.animationsPaused()),true);
+ assert.equal(await page.locator('[data-guide-diagram]').getAttribute('data-step'),'0');
+ await page.screenshot({path:'/test/sa-fleet-yaml.png',fullPage:true});
+ assert.equal(after,before.replace('telemetry-baseline','telemetry-detailed'),'Only the service configuration reference changes');
+ assert.ok((await page.locator('#sa-fleet-intent').innerText()).includes('72 DPUs'));
+ assert.equal(await page.locator('[data-rack-selected="true"]').count(),2);
+ assert.equal(await page.locator('[data-rack-selected="false"]').count(),1);
+ await page.getByRole('button',{name:'Baseline telemetry',exact:true}).click();
+ assert.equal(await page.locator('#sa-fleet-yaml').innerText(),before);
  await page.locator('#sa-topics a[href="#services"]').click();
  for(const id of ['hbn','argus','snap','dts']) {
    await page.locator(`[data-service="${id}"]`).click();
@@ -29,7 +44,7 @@ try {
  await page.keyboard.press('ArrowRight');
  await page.waitForFunction(()=>document.querySelector('#sa-slide').dataset.slide==='rollout',null,{timeout:3000});
  await page.keyboard.press('Escape');assert.equal(await page.locator('body').getAttribute('data-presenting'),'false');
- for(const id of ['rollout','paths']) {
+ for(const id of ['fleet','tenants','rollout','paths']) {
    await page.locator(`#sa-topics a[href="#${id}"]`).click();
    const diagram=page.locator('[data-guide-diagram]');
    assert.equal(await diagram.locator('svg').evaluate(el=>el.animationsPaused()),true);
@@ -69,6 +84,13 @@ try {
      await page.locator('#course-menu > summary').click();
    }
    await page.screenshot({path:`/test/sa-mobile-${width}.png`,fullPage:true});
+ }
+ for(const id of ['rack','fleet','tenants']) {
+   await page.goto('http://127.0.0.1:8780/sa-demo#'+id);
+   await page.waitForFunction(id=>document.querySelector('#sa-slide').dataset.slide===id,id);
+   if(id==='fleet')await page.locator('.sa-yaml-full > summary').click();
+   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),id+' mobile overflow');
+   await page.screenshot({path:`/test/sa-${id}-390.png`,fullPage:true});
  }
  assert.deepEqual(errors,[]);assert.deepEqual(writes,[]);assert.deepEqual(sockets,[]);assert.deepEqual(external,[]);
  console.log('PASS: SA presentation slides, services, speaker notes, presenter mode, shared playback/disposal, deep links, mobile and no mutations.');
