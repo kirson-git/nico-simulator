@@ -1,3 +1,4 @@
+import {staticFiles} from './static-files.mjs';
 // Terminal transport adapted from k8s-101-launchable; see THIRD_PARTY_NOTICES.txt.
 import {createServer} from 'node:http';
 import {readFile, copyFile, access} from 'node:fs/promises';
@@ -34,46 +35,7 @@ async function getResource(args) {
   const text = await kubectl(['get', ...args, '--ignore-not-found', '-o', 'json']);
   return text.trim() ? JSON.parse(text) : null;
 }
-const staticFiles = new Map([
-  ['/', ['web/dpu101.html', 'text/html']],
-  ['/sa-demo', ['web/sa-demo.html', 'text/html']],
-  ['/sa-demo.css', ['web/sa-demo.css', 'text/css']],
-  ['/sa-demo.js', ['web/sa-demo.js', 'text/javascript']],
-  ['/sa-demo-fleet.js', ['web/sa-demo-fleet.js', 'text/javascript']],
-  ['/sa-demo-data.js', ['web/sa-demo-data.js', 'text/javascript']],
-  ['/dpf101', ['web/dpf101.html', 'text/html']],
-  ['/dpf101.css', ['web/dpf101.css', 'text/css']],
-  ['/manual-dpu', ['web/manual-dpu.html', 'text/html']],
-  ['/manual-dpu.js', ['web/manual-dpu.js', 'text/javascript']],
-  ['/manual-dpu-model.mjs', ['web/manual-dpu-model.mjs', 'text/javascript']],
-  ['/manual-dpu.css', ['web/manual-dpu.css', 'text/css']],
-  ['/dpu-config', ['web/dpu-config.html', 'text/html']],
-  ['/dpu-config.js', ['web/dpu-config.js', 'text/javascript']],
-  ['/dpu-config-data.js', ['web/dpu-config-data.js', 'text/javascript']],
-  ['/dpu-config.css', ['web/dpu-config.css', 'text/css']],
-  ['/yaml-examples.json', ['web/yaml-examples.json', 'application/json']],
-  ['/host-ubuntu', ['web/host-ubuntu.html', 'text/html']],
-  ['/host-ubuntu.js', ['web/host-ubuntu.js', 'text/javascript']],
-  ['/host-ubuntu-model.mjs', ['web/host-ubuntu-model.mjs', 'text/javascript']],
-  ['/host-ubuntu.css', ['web/host-ubuntu.css', 'text/css']],
-  ['/kubernetes', ['web/index.html', 'text/html']],
-  ['/dpu101.css', ['web/dpu101.css', 'text/css']],
-  ['/dpu101.js', ['web/dpu101.js', 'text/javascript']],
-  ['/guide-diagrams.js', ['web/guide-diagrams.js', 'text/javascript']],
-  ['/guide-diagrams.css', ['web/guide-diagrams.css', 'text/css']],
-  ['/images/dpu-board-reference-1.png', ['web/images/dpu-board-reference-1.png', 'image/png']],
-  ['/images/dpu-board-reference-2.png', ['web/images/dpu-board-reference-2.png', 'image/png']],
-  ['/images/dpu-board-photo.png', ['web/images/dpu-board-photo.png', 'image/png']],
-  ['/course.css', ['web/course.css', 'text/css']],
-  ['/course-nav.js', ['web/course-nav.js', 'text/javascript']],
-  ['/fonts/nvidia-sans-regular.woff2', ['web/fonts/nvidia-sans-regular.woff2', 'font/woff2']],
-  ['/fonts/nvidia-sans-bold.woff2', ['web/fonts/nvidia-sans-bold.woff2', 'font/woff2']],
-  ['/app.js', ['web/app.js', 'text/javascript']],
-  ['/style.css', ['web/style.css', 'text/css']],
-  ['/xterm.js', ['node_modules/@xterm/xterm/lib/xterm.js', 'text/javascript']],
-  ['/xterm.css', ['node_modules/@xterm/xterm/css/xterm.css', 'text/css']],
-  ['/fit.js', ['node_modules/@xterm/addon-fit/lib/addon-fit.js', 'text/javascript']],
-]);
+
 let resetting = false;
 const server = createServer(async (req, res) => {
   const reply = (status, data) => { res.writeHead(status, {'Content-Type': 'application/json', 'Cache-Control': 'no-store'}); res.end(JSON.stringify(data)); };

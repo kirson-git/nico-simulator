@@ -3,6 +3,8 @@
 !package-lock.json
 !Dockerfile
 !server.mjs
+!shared-server.mjs
+!static-files.mjs
 !lesson.mjs
 !web/
 !web/**

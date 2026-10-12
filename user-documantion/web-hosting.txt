@@ -1,0 +1,31 @@
+DIRECT BROWSER ACCESS
+
+The shared web server serves the same allowlisted course assets as the local
+lab. It runs shared-server.mjs, which does not load Kubernetes credentials,
+spawn a shell, accept WebSockets or implement cluster APIs. Simulated DPU and
+Ubuntu terminals remain available because they run entirely in the browser.
+/kubernetes explains how to run the real exercise locally.
+
+Build: ./workshop.sh --build
+Start: ./web.sh --start SERVER_IPV4 [PORT]
+Status: ./web.sh --status
+Logs: ./web.sh --logs
+Stop: ./web.sh --stop
+Help: ./web.sh --help
+
+Use a specific IPv4 address assigned to the server. The optional port defaults
+to 8781, with accepted range 1-65535; wildcard 0.0.0.0 is rejected. Start needs
+Docker, Python 3, curl and the built dpf-workshop:0.1.0 image. It creates or
+replaces only a container named nico-simulator-web with the shared-course owner
+label; an unrelated container with that name is refused. Failed readiness is
+reported with container logs. Stop preserves the container; start recreates it.
+
+The read-only container has no volumes or host credentials. Restart policy is
+unless-stopped. It stays up when SSH closes and restarts when Docker starts.
+The original localhost:8780 full lab and its training cluster remain separate.
+After updating source, rebuild the image and repeat the start command.
+
+There is no login or TLS on this shared endpoint. Use a trusted lab network.
+Internet hosting and shared real terminals require a separate authenticated
+HTTPS deployment. The laptop needs routing/VPN and firewall access to the
+chosen server address and port; no host changes can establish that client route.

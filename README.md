@@ -38,6 +38,39 @@ are teaching copies from a BlueField-3 lab; this is not a BlueField-4 deployment
 compatibility claim. The original uploaded diagrams remain unchanged, with
 nearby explanations of their historical labels.
 
+## Share the course on your lab network
+
+Build the image, then start the course web server on an IPv4 address assigned
+to your server (replace the example address):
+
+```bash
+./workshop.sh --build
+./web.sh --start 192.168.1.20
+```
+
+Open `http://192.168.1.20:8781/sa-demo` from another computer on the same network
+or a VPN with access to that address. No SSH tunnel is needed. Port 8781 must be
+reachable from the client. The container restarts with Docker and keeps running
+when you close SSH.
+
+This shared endpoint provides the course, presentations and browser simulations
+without login. The real Kubernetes terminal stays in the local lab; the shared
+server has no cluster credentials or learner workspace. Use this on a trusted
+lab network. For internet hosting or shared real terminals, add authenticated
+HTTPS access as a separate deployment.
+
+```bash
+./web.sh --status
+./web.sh --logs
+./web.sh --stop
+```
+
+An optional third argument selects a port: `./web.sh --start 192.168.1.20 8088`.
+Use a specific IPv4 address; wildcard `0.0.0.0` is rejected. Port defaults to
+8781 and must be 1–65535. Re-running `--start` replaces only the owned shared
+web container. After course updates, rebuild and repeat the start command.
+See [web hosting details](user-documantion/web-hosting.txt).
+
 ## Installation options
 
 | Option | Availability | Where it runs |

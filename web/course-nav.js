@@ -4,12 +4,13 @@ export const introTopics = [
   ['modes', 'DPU mode vs NIC mode'],
   ['software', 'OS first, then containers'],
 ];
+const sharedCourse = document.querySelector('meta[name="course-mode"]')?.content === 'shared';
 const groups = [
   ['01a', 'Why DPF?', '/dpf101', 'Motivation & use cases'],
   ['DEMO', 'DPF service rollout', '/sa-demo', 'Visual presentation'],
   ['01b', 'Manual DPU → HBN', '/manual-dpu', 'Simulated CLI'],
   ['01c', 'BF4 installation differences', '/manual-dpu#bf4-compatibility', 'BF3 vs BF4'],
-  ['02', 'Kubernetes basics', '/kubernetes', 'Hands-on'],
+  ['02', 'Kubernetes basics', '/kubernetes', sharedCourse ? 'Local lab required' : 'Hands-on'],
   ['03', 'Prerequisites', null, 'Planned'],
   ['04', 'DPF operator', null, 'Planned'],
   ['05', 'DPU discovery', null, 'Planned'],
