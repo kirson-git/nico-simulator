@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Why DPF? · DPF Workshop</title>
+<link rel="stylesheet" href="/dpu101.css"><link rel="stylesheet" href="/course.css"><link rel="stylesheet" href="/dpf101.css">
+<script type="module" src="/course-nav.js"></script></head>
+<body class="course-shell"><header><a class="brand" href="/">◈ <span>DPF <b>WORKSHOP</b></span></a><span class="badge">CONCEPT LESSON</span><a class="lab-link" href="/#what-is-dpu">DPU 101</a></header>
+<div class="course"><aside class="course-sidebar" data-course-nav></aside><main>
+<div class="chapter-meta"><span>DPF 101 · START WITH THE WHY</span><span>4 MIN · NO INSTALLATION</span></div>
+<h1>Why do we need DPF?</h1>
+<p class="lead">A DPU is a computer you must operate. Now imagine operating hundreds of them.</p>
+<p>For one DPU, you can install its OS, configure ports, start HBN and check the results manually. Repeat that for every server, then repeat it again when software changes. Keeping versions and settings consistent becomes an operations problem.</p>
+<div class="callout"><strong>The motivation:</strong> turn a repeated device-by-device procedure into a declared, repeatable fleet workflow—with status you can inspect.</div>
+<h2>What is DPF?</h2>
+<p><strong>DOCA Platform Framework</strong> uses Kubernetes APIs to provision supported BlueField DPUs and manage their services. You describe the desired deployment; controllers compare it with the observed state and work to make them agree. This ongoing loop is called <em>reconciliation</em>.</p>
+<p>DPF coordinates the work. The DPU provides the hardware; its OS runs the software; a service such as HBN provides networking functions. <a href="https://networking-docs.nvidia.com/doca/archive/3-5-0/doca-platform-framework-dpf" target="_blank" rel="noopener noreferrer">NVIDIA DPF overview ↗</a></p>
+<h2>Where would we use it?</h2>
+<div class="dpf-use-cases">
+<section><h3>A growing DPU fleet</h3><p>Example: provision the same approved software and configuration across a rack, then see which DPUs need attention.</p></section>
+<section><h3>Infrastructure services</h3><p>Deploy and manage networking, storage or telemetry services on DPUs. For our course, HBN is the networking example.</p></section>
+<section><h3>Separately managed hosts</h3><p>In a Zero Trust design, infrastructure administrators manage DPUs separately from workload hosts. DPF supports that deployment model.</p></section>
+</div>
+<p><strong>When might you skip it?</strong> For a small manual experiment or basic NIC operation, a full DPF environment may add more work than it saves. This is a design tradeoff, not a minimum device-count rule. DPF becomes useful when repeatability and ongoing operations matter.</p>
+<p>Zero Trust also requires the appropriate management network, host restrictions and service configuration. Installing an operator or naming tenants “Europe” and “Asia” does not create isolation. <a href="https://networking-docs.nvidia.com/dpf/26.4.0/zero-trust-deployment" target="_blank" rel="noopener noreferrer">NVIDIA Zero Trust architecture ↗</a></p>
+<h2>Where does DPF fit?</h2>
+<figure class="dpf-architecture">
+<div class="dpf-diagram-scroll" role="region" aria-label="DPF management architecture; scroll horizontally on small screens" tabindex="0">
+<svg viewBox="0 0 900 360" role="img" aria-labelledby="dpf-diagram-title dpf-diagram-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="dpf-diagram-title">Desired configuration reaches DPUs through DPF controllers</title>
+<desc id="dpf-diagram-desc">The operator submits configuration to the management Kubernetes cluster. DPF controllers coordinate provisioning and service deployment on DPU A and DPU B. These arrows represent management, not application packets.</desc>
+<defs><marker id="dpf-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#9fce68"/></marker></defs>
+<rect class="dpf-config-box" x="20" y="25" width="250" height="95" rx="12"/>
+<text x="145" y="60" class="dpf-svg-title">You declare the outcome</text><text x="145" y="88">Selected DPUs + OS + services</text>
+<path class="dpf-control-arrow" d="M270 73 H355"/><text x="310" y="48" class="dpf-svg-small">API</text>
+<rect class="dpf-manager-box" x="365" y="15" width="500" height="125" rx="12"/>
+<text x="615" y="49" class="dpf-svg-title">Management Kubernetes cluster</text><text x="615" y="81">DPF controllers: provisioning + services</text><text x="615" y="110">Desired configuration ↔ observed status</text>
+<path class="dpf-control-arrow" d="M545 140 V178 H265 V213"/><path class="dpf-control-arrow" d="M685 140 V213"/>
+<text x="450" y="199" class="dpf-svg-small">Management / orchestration</text>
+<rect class="dpf-device-box" x="85" y="223" width="360" height="112" rx="12"/><rect class="dpf-device-box" x="505" y="223" width="360" height="112" rx="12"/>
+<text x="265" y="255" class="dpf-svg-title">DPU A · own Arm computer</text><text x="265" y="284">Arm OS → service containers</text><text x="265" y="310">Networking hardware</text>
+<text x="685" y="255" class="dpf-svg-title">DPU B · own Arm computer</text><text x="685" y="284">Arm OS → service containers</text><text x="685" y="310">Networking hardware</text>
+</svg></div>
+<figcaption>On small screens, scroll the diagram sideways. Conceptual management view. Transport and cluster layout depend on the deployment model. Workload packets follow configured DPU network paths; they do not pass through these DPF controllers.</figcaption>
+</figure>
+<h2>What work does it coordinate?</h2>
+<ol class="dpf-lifecycle">
+<li><strong>Identify and provision.</strong> Select the DPUs and compatible installation artifacts; configure the DPU system.</li>
+<li><strong>Deploy services.</strong> Run the chosen services and configure their network connections.</li>
+<li><strong>Observe and reconcile.</strong> Inspect status, address failed prerequisites and manage lifecycle changes through the declared configuration.</li>
+</ol>
+<p>An operator being installed is only the starting point. A DPU OS booting, a service running and traffic forwarding correctly are separate outcomes to verify. DPF cannot repair missing cabling or make an unsupported software combination compatible.</p>
+<details class="dpf-terms"><summary>Meet the names you will see in later lessons</summary>
+<dl><dt>DPF operator</dt><dd>Manages the DPF system components in Kubernetes.</dd><dt>DPU cluster</dt><dd>A Kubernetes environment whose worker nodes are DPUs. Its control plane and the management cluster are distinct roles.</dd><dt>DPUFlavor / DPUSet</dt><dd>Describe system settings and manage DPU provisioning.</dd><dt>DPUService / DPUServiceChain</dt><dd>Describe services and how traffic is steered between their interfaces.</dd></dl>
+<p>No YAML is needed yet. These terms are introduced in the <a href="https://networking-docs.nvidia.com/dpf/26.4.0/architecture" target="_blank" rel="noopener noreferrer">DPF architecture</a> and <a href="https://networking-docs.nvidia.com/dpf/26.4.0/api" target="_blank" rel="noopener noreferrer">resource reference</a>.</p></details>
+<div class="callout"><strong>Your takeaway:</strong> choose DPF when you want a repeatable way to provision and operate DPU infrastructure through Kubernetes. It manages the lifecycle; the DPU and its services do the work.</div>
+<p class="dpf-next"><a href="/manual-dpu">See the manual work DPF helps automate →</a><a href="/kubernetes">Learn the Kubernetes basics →</a></p>
+<p class="sources">Concept lesson only. No commands or deployments run on this page. Hardware, images and service support depend on the selected DPF release; see the <a href="/manual-dpu#bf4-compatibility">BF4 installation comparison</a>.</p>
+</main></div></body></html>

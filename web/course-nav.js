@@ -5,6 +5,7 @@ export const introTopics = [
   ['software', 'OS first, then containers'],
 ];
 const groups = [
+  ['01a', 'Why DPF?', '/dpf101', 'Motivation & use cases'],
   ['01b', 'Manual DPU → HBN', '/manual-dpu', 'Simulated CLI'],
   ['01c', 'BF4 installation differences', '/manual-dpu#bf4-compatibility', 'BF3 vs BF4'],
   ['02', 'Kubernetes basics', '/kubernetes', 'Hands-on'],

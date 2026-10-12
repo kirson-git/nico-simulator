@@ -36,6 +36,8 @@ async function getResource(args) {
 }
 const staticFiles = new Map([
   ['/', ['web/dpu101.html', 'text/html']],
+  ['/dpf101', ['web/dpf101.html', 'text/html']],
+  ['/dpf101.css', ['web/dpf101.css', 'text/css']],
   ['/manual-dpu', ['web/manual-dpu.html', 'text/html']],
   ['/manual-dpu.js', ['web/manual-dpu.js', 'text/javascript']],
   ['/manual-dpu-model.mjs', ['web/manual-dpu-model.mjs', 'text/javascript']],

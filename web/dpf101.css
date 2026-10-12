@@ -1,0 +1,22 @@
+.dpf-use-cases { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; margin:24px 0; }
+.dpf-use-cases section { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:20px; }
+.dpf-use-cases h3 { font-size:20px; margin:0 0 12px; }
+.dpf-use-cases p { font-size:16px; margin:0; }
+.dpf-architecture { margin:24px 0; border:1px solid var(--line); border-radius:10px; padding:16px; background:var(--panel); }
+.dpf-diagram-scroll { overflow-x:auto; }
+.dpf-diagram-scroll svg { display:block; width:100%; min-width:720px; }
+.dpf-diagram-scroll text { fill:#e4eadf; text-anchor:middle; font:16px 'NVIDIA Sans',sans-serif; }
+.dpf-diagram-scroll .dpf-svg-title { font-size:18px; font-weight:bold; }
+.dpf-diagram-scroll .dpf-svg-small { font-size:14px; fill:#b7c6a8; }
+.dpf-config-box { fill:#242d1e; stroke:#91bb64; }
+.dpf-manager-box { fill:#142b35; stroke:#72b7d8; }
+.dpf-device-box { fill:#29241c; stroke:#bba174; }
+.dpf-control-arrow { fill:none; stroke:#9fce68; stroke-width:2; stroke-dasharray:6 4; marker-end:url(#dpf-arrow); }
+.dpf-architecture figcaption { font-size:15px; color:var(--muted); margin-top:16px; }
+.dpf-lifecycle li { padding:8px 0; }
+.dpf-terms { padding:18px; border:1px solid var(--line); border-radius:8px; margin:24px 0; }
+.dpf-terms summary { cursor:pointer; color:var(--blue); }
+.dpf-terms dt { font-weight:bold; margin-top:16px; }
+.dpf-terms dd { margin:5px 0; }
+.dpf-next { display:flex; gap:24px; flex-wrap:wrap; }
+@media(max-width:900px) { .dpf-use-cases { grid-template-columns:1fr; } }
