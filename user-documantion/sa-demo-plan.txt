@@ -1,0 +1,23 @@
+SA DEMO — presentation brief, 2026-10-12
+
+User outcome: explain DPF motivation and how it rolls out DOCA services to an
+SA audience using pictures, animation and a dedicated /sa-demo page.
+
+Seven scenes: motivation; hardware/DOCA/DPF layers; service catalogue;
+animated DPF rollout; networking versus security work; lifecycle changes;
+onboarding compatible new services. Keep one main idea per scene.
+
+Reuse exact uploaded board image and shared SVG playback. New diagrams use
+management tokens separately from packet and memory-inspection paths. Start
+paused; support Play/Pause/Step/Replay, reduced motion and disposal on navigation.
+Use slide links, keyboard navigation, projector mode and optional speaker notes.
+No hardware access, shell, cluster changes or fabricated observed status.
+
+Verified examples: HBN, Argus, SNAP and DTS. DOCA is an SDK/software ecosystem,
+not a peer application. TOWER and HBA names are awaiting user clarification;
+do not invent products or claim support. BF4 service support is release-specific.
+
+Validation: all slide/deep-link navigation, service selection, animations and
+cleanup, keyboard/mobile layout, browser-only requests, existing shared diagram
+regressions and existing unit tests. Preview then update course only; keep the
+kind cluster and learner workspace. Publish to the existing simulator repo.

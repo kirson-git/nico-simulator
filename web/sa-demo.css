@@ -1,0 +1,54 @@
+.sa-shell .sa-header-actions { display:flex; gap:16px; align-items:center; margin-left:auto; }
+.sa-shell .sa-header-actions button { padding:7px 12px; font-size:14px; }
+.sa-shell .sa-header-actions a { font-size:14px; }
+.sa-agenda { padding:22px 16px; border-bottom:1px solid var(--line); }
+.sa-agenda h2 { font-size:21px; margin:0 0 14px; }
+#sa-topics { display:grid; gap:4px; margin:0; }
+#sa-topics a { display:flex; gap:12px; align-items:center; padding:10px; font-size:15px; text-decoration:none; border-radius:6px; color:var(--muted); }
+#sa-topics a span { color:var(--green); font-size:12px; }
+#sa-topics a[aria-current] { background:#263818; color:#e3fac2; }
+.sa-shell main { max-width:1600px!important; }
+.sa-meta { display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:11px; letter-spacing:1.4px; color:var(--muted); }
+.sa-shell #sa-title { font-size:clamp(30px,3.1vw,49px); line-height:1.14; max-width:1050px; margin:22px 0 14px; letter-spacing:-1px; }
+#sa-title:focus { outline:none; }
+.sa-shell .sa-lead { font-size:clamp(18px,1.6vw,24px); color:#d5decf; margin:0 0 25px; }
+.sa-shell .sa-takeaway { font-size:21px; padding:15px 20px; border-left:3px solid var(--green); background:#192411; color:#d5edbf; margin:22px 0; }
+.sa-hero { display:grid; grid-template-columns:1fr 1fr; gap:30px; align-items:center; }
+.sa-hero figure { margin:0; padding:20px; border:1px solid var(--line); border-radius:14px; background:#141811; }
+.sa-hero img { width:100%; max-height:290px; object-fit:contain; display:block; }
+.sa-hero figcaption { font-size:12px; color:var(--muted); margin-top:14px; }
+.sa-story p { font-size:20px; }.sa-story .sa-big { font-size:27px; color:var(--text); }
+.sa-rack { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.sa-rack>div { border:1px solid #476138; border-radius:6px; padding:10px 12px; background:#172113; }
+.sa-rack span { font-size:14px; }.sa-rack small { display:block; color:var(--muted); font-size:12px; }
+.sa-rack i { float:right; width:7px; height:7px; border-radius:50%; background:var(--green); margin:6px; }
+.sa-layer-stack { display:grid; gap:12px; max-width:1100px; margin:auto; }
+.sa-layer-stack>div { display:grid; grid-template-columns:220px 1fr; padding:20px 26px; background:#16222b; border:1px solid #53718c; border-radius:10px; }
+.sa-layer-stack>div:nth-child(2){background:#14261c;border-color:#45805c;}.sa-layer-stack>div:nth-child(3){background:#282017;border-color:#98713e;}.sa-layer-stack>div:nth-child(4){background:#252031;border-color:#7c6399;}
+.sa-layer-stack b { font-size:25px; grid-row:span 2; align-self:center; }.sa-layer-stack span{font-size:21px;}.sa-layer-stack small { font-size:13px;color:var(--muted); }
+.sa-icon { width:54px; height:54px; flex-shrink:0; color:var(--green); }
+.sa-icon path { fill:none; stroke:currentColor; stroke-width:2.3; stroke-linecap:round; stroke-linejoin:round; }
+.sa-service-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+.sa-shell .sa-service-grid button { display:flex; flex-direction:column; align-items:center; gap:8px; padding:24px 10px; background:#151e12; border:1px solid #3f5131; border-radius:12px; }
+.sa-service-grid strong{font-size:22px;}.sa-service-grid span{font-size:14px;color:var(--muted);}
+.sa-shell .sa-service-grid button[aria-pressed=true]{border-color:var(--green);background:#25371a;box-shadow:inset 0 -3px var(--green);}
+.sa-service-detail { display:flex; gap:24px; padding:28px; margin:22px 0; border:1px solid var(--line); border-radius:12px; background:var(--panel); }
+.sa-shell .sa-service-detail h2 { font-size:27px; margin:0 0 14px; letter-spacing:0; }.sa-service-detail p { font-size:19px; }
+.sa-service-detail .sa-proof { color:#d8eabf; }.sa-service-detail a{font-size:14px;}
+.sa-three { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+.sa-card { padding:25px; background:var(--panel); border:1px solid var(--line); border-radius:12px; }.sa-card h3{font-size:25px;}.sa-card p{font-size:19px;}
+.sa-resource-strip,.sa-evidence,.sa-future-path { display:flex; flex-wrap:wrap; gap:14px; align-items:center; margin:20px 0; }
+.sa-resource-strip>span,.sa-evidence>span,.sa-future-path>span{padding:12px 18px;background:#18241b;border:1px solid #435b43;border-radius:8px;font-size:17px;}
+.sa-resource-strip b{display:block;color:var(--text);}.sa-evidence>b{font-size:20px;}.sa-future-path{justify-content:center;}.sa-future-path>b{color:var(--green);font-size:24px;}
+.sa-shell .sa-footnote{font-size:14px;color:var(--muted);}
+.sa-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:20px;margin-top:24px;}
+#sa-navigation-hint{font-size:13px;color:var(--muted);margin-right:auto;}.sa-controls button:disabled{opacity:.4;cursor:default;}
+#sa-notes{background:#14212b;border:1px solid #4e6c80;padding:20px;border-radius:10px;margin-top:18px;font-size:17px;}
+#sa-notes[hidden]{display:none;}.sa-shell .sources{margin-top:20px;padding-top:12px;}
+.sa-shell[data-presenting=true] .course-sidebar{display:none;}.sa-shell[data-presenting=true] .course{grid-template-columns:minmax(0,1fr);}
+.sa-shell [data-guide-diagram=rollout] .gd-legend-flow::before{background:var(--gd-step);}
+.sa-shell .guide-diagram{margin:15px 0;}.sa-shell .gd-scroll svg{max-height:430px;}.sa-shell .gd-scroll{max-width:100%;}
+@media(max-width:1000px){.sa-hero,.sa-three{grid-template-columns:1fr;}.sa-service-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.sa-layer-stack>div{grid-template-columns:1fr;gap:6px;}.sa-layer-stack b{grid-row:auto;}}
+@media(max-width:760px){.sa-agenda{padding:12px 16px;}#sa-topics{grid-template-columns:1fr 1fr;}.sa-shell .course-sidebar{height:auto;position:static;}.sa-shell .badge{display:none;}.sa-header-actions a{display:none;}.sa-shell .sa-header-actions button{font-size:12px;}.sa-service-detail{padding:18px;gap:10px;}.sa-service-detail>.sa-icon{display:none;}.sa-controls{gap:8px;}#sa-navigation-hint{display:none;}.sa-shell .gd-scroll svg{max-height:none;}.sa-shell .sa-meta>span:last-child{display:none;}}
+
+@media(max-width:760px){.sa-shell #course-menu[open] .catalog-body{position:static;max-height:60dvh;}}

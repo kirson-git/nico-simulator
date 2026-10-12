@@ -1,0 +1,41 @@
+DPF SA PRESENTATION
+
+Open http://localhost:8780/sa-demo after starting the course.
+Seven linked scenes explain why DPF exists, the DPU/DOCA/DPF layers, service
+examples, rollout, service behavior, lifecycle changes and new-service integration.
+
+CONTROLS
+Use the scene list, Previous/Next or the left/right keyboard arrows.
+Arrow keys inside diagrams scroll the picture instead of changing scenes.
+Presentation mode hides the sidebar; Escape restores it. It does not request
+browser full-screen access. Speaker notes can be shown separately.
+Animation controls are on the upper right: Play/Pause, Step and Replay.
+Animations start paused, stop when changing scenes or hiding the tab, and use
+single-step playback when reduced motion is enabled in the operating system.
+Each scene has a linkable URL fragment, such as /sa-demo#rollout.
+
+CONTENT BOUNDARY
+All motion, fleet devices and examples are authored illustrations. No live
+installation, health measurement, attack detection or packet transfer occurs.
+The service examples are HBN, Argus, SNAP and DOCA Telemetry, grounded in the
+linked NVIDIA DPF 26.4.0 guides. They are not a validated combined deployment or
+a BF4 compatibility promise. DOCA is the software ecosystem, not a single peer
+container. The course owner's TOWER and HBA labels await clarification.
+
+Reused original board imagery remains unchanged. The new SVG diagrams reuse the
+course animation controller and separate management, forwarding and inspection.
+Argus inspects host memory and emits events; it is not shown as an inline firewall.
+
+A smaller initial deployment set is an operator practice, not a claim that DPF
+provides automatic canary analysis. Update disruption depends on configuration.
+New services require compatible images, conformant charts and validation.
+
+SOURCES
+https://networking-docs.nvidia.com/doca/archive/3-5-0/doca-platform-framework-dpf
+https://networking-docs.nvidia.com/dpf/26.4.0/dpudeployment
+https://networking-docs.nvidia.com/dpf/26.4.0/overview
+https://networking-docs.nvidia.com/dpf/26.4.0/doca-argus-service
+https://networking-docs.nvidia.com/dpf/26.4.0/hbn-in-dpf-zero-trust
+https://networking-docs.nvidia.com/dpf/26.4.0/hbn-and-snap-storage-in-dpf-zero-trust
+https://networking-docs.nvidia.com/dpf/26.4.0/doca-telemetry-service
+https://networking-docs.nvidia.com/dpf/26.4.0/dpuservice-development-guide

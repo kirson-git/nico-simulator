@@ -1,6 +1,17 @@
 // The l-csi guide's visual grammar: colored domains, labeled arrows and SVG motion.
 // Course concepts only; these diagrams do not represent live deployment status.
 const descriptions = {
+  rollout: [
+    'Declare the selected DPUs, service templates and configuration through the management Kubernetes API. This is authored playback, not a live deployment.',
+    'Controllers resolve the declared dependencies. In the documented architecture, the service controller uses Argo CD to synchronize chart-based workloads; container images come from a registry.',
+    'The DPU cluster schedules service containers on selected, provisioned DPU workers. Placement and network configuration must match the chosen service.',
+    'Inspect reported conditions and test the intended outcome. A running pod does not prove working routing, security detection or storage access.',
+  ],
+  servicePaths: [
+    'Networking example: HBN configures forwarding. Supported host traffic uses the DPU network engine on the way to the fabric; it does not traverse DPF controllers.',
+    'Security example: Argus on the DPU inspects host memory using hardware access. This is a separate inspection path, not a packet service chain.',
+    'Argus produces security events for collection and analysis. Detection and export need configuration; this animation does not claim a threat was observed.',
+  ],
   manual: [
     'What is a DPU? The card has an Arm computer and network hardware. First inspect its mode. HBN requires the Arm environment; an installed OS can remain on storage while NIC mode makes Arm unavailable.',
     'Install the Arm OS: the trusted host pushes a BFB through RShim in this manual example. This is a provisioning path, not the application data path. It must happen before disabling host RShim.',
@@ -19,8 +30,8 @@ const descriptions = {
     'Only after the OS and cluster are ready can DPF deploy service containers onto the DPU. HBN is one example; it still needs its own configuration.',
   ],
 };
-const headings = {manual: 'Host, DPU and network: who does what?', modes: 'Same card. Different control owner.', software: 'From a bare DPU to running services'};
-const stageNames = {manual: ['Identify the systems', 'Install the BFB', 'Run HBN and forward', 'Restrict and retain management'], modes: ['Control ownership', 'Hardware forwarding', 'Out to the network'], software: ['Provision', 'Boot the OS', 'Join the cluster', 'Deploy services']};
+const headings = {rollout: 'From declared intent to service pods', servicePaths: 'Two services. Two different jobs.', manual: 'Host, DPU and network: who does what?', modes: 'Same card. Different control owner.', software: 'From a bare DPU to running services'};
+const stageNames = {rollout: ['Declare', 'Resolve and synchronize', 'Deploy on selected DPUs', 'Verify the outcome'], servicePaths: ['Forward traffic', 'Inspect memory', 'Export security events'], manual: ['Identify the systems', 'Install the BFB', 'Run HBN and forward', 'Restrict and retain management'], modes: ['Control ownership', 'Hardware forwarding', 'Out to the network'], software: ['Provision', 'Boot the OS', 'Join the cluster', 'Deploy services']};
 const label = (x, y, text, cls = 'gd-text', anchor = 'middle') => `<text x="${x}" y="${y}" class="${cls}" text-anchor="${anchor}">${text}</text>`;
 const box = (x, y, w, h, title, sub, cls = '') => `<g class="gd-box ${cls}"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>${label(x+w/2, y+28, title)}${sub ? label(x+w/2, y+51, sub, 'gd-small') : ''}</g>`;
 const badge = (x,y,n) => `<circle cx="${x}" cy="${y}" r="14" class="gd-number"/>${label(x,y+6,n,'gd-number-text')}`;
@@ -113,6 +124,63 @@ function manualDrawing() {
   </svg>`;
 }
 
+// Reuse the shared paused/step/replay controller for presentation diagrams.
+function phaseToken(path, phase, total, cls='gd-token') {
+  const start=phase/total, end=(phase+1)/total;
+  const times=[0,...(start ? [start] : []),end,...(end<1 ? [1] : [])];
+  const points=[0,...(start ? [0] : []),1,...(end<1 ? [1] : [])];
+  const opacity=Array.from({length:total},(_,i)=>i===phase?1:0);
+  return `<circle r="7" class="${cls}"><animateMotion dur="${total*3}s" repeatCount="indefinite" path="${path}" keyTimes="${times.join(';')}" keyPoints="${points.join(';')}" calcMode="linear"/><animate attributeName="opacity" values="${opacity.join(';')}" keyTimes="${opacity.map((_,i)=>i/total).join(';')}" dur="${total*3}s" repeatCount="indefinite" calcMode="discrete"/></circle>`;
+}
+function rolloutDrawing() {
+  return `<svg viewBox="0 0 960 430" role="img" aria-label="DPF service rollout: desired configuration, controllers and Argo CD, DPU cluster and service pods, then outcome checks.">
+    ${defs('gd-rollout-arrow')}
+    <rect x="12" y="12" width="936" height="172" rx="12" class="gd-lane gd-management"/>
+    ${label(30,40,'MANAGEMENT · DECLARE AND COORDINATE','gd-lane-title','start')}
+    ${box(30,62,234,80,'Desired configuration','Targets + services + settings','gd-host')}
+    ${box(346,62,240,80,'DPF controllers','DPUService → Argo CD','gd-host')}
+    ${box(690,62,232,80,'Chart / image registries','Versioned service artifacts','gd-services')}
+    ${arrow('M264 103 H344','gd-control','gd-rollout-arrow')}
+    ${arrow('M690 103 H588','gd-control','gd-rollout-arrow')}
+    ${label(302,87,'API','gd-small')}${label(636,87,'resolve','gd-small')}
+    <rect x="12" y="226" width="936" height="192" rx="12" class="gd-lane gd-dpu"/>
+    ${label(32,255,'DPU CLUSTER · PROVISIONED WORKERS','gd-lane-title','start')}
+    ${box(34,286,266,92,'DPU A · selected','Arm OS + service pods','gd-os')}
+    ${box(347,286,266,92,'DPU B · selected','Arm OS + service pods','gd-os')}
+    ${box(660,286,266,92,'DPU C · outside selection','No change in this example','gd-inactive')}
+    ${arrow('M466 142 V209 H166 V284','gd-control','gd-rollout-arrow')}
+    ${arrow('M480 142 V284','gd-control','gd-rollout-arrow')}
+    ${arrow('M613 334 H640 V162 H540 V144','gd-control','gd-rollout-arrow')}
+    ${label(657,179,'status','gd-small')}
+    ${label(770,207,'Pods pull their container images','gd-small')}
+    ${label(479,401,'Then verify service health and its actual function','gd-small')}
+    ${phaseToken('M264 103 H344',0,4)}${phaseToken('M690 103 H588',1,4)}
+    ${phaseToken('M466 142 V209 H166 V284',2,4)}${phaseToken('M480 142 V284',2,4)}
+    ${phaseToken('M613 334 H640 V162 H540 V144',3,4)}
+  </svg>`;
+}
+function servicePathsDrawing() {
+  return `<svg viewBox="0 0 960 450" role="img" aria-label="Top: HBN programs the network engine and host packets forward to the fabric. Bottom: Argus inspects host memory and sends security events to a collector. Argus is not inline in the packet path.">
+    ${defs('gd-service-path-arrow')}
+    <rect x="12" y="12" width="936" height="224" rx="12" class="gd-lane gd-management"/>
+    ${label(32,40,'NETWORKING · CONFIGURED HBN EXAMPLE','gd-lane-title','start')}
+    ${box(32,136,210,74,'Host workloads','Applications send traffic','gd-host')}
+    ${box(356,57,240,64,'HBN container','Programs network rules','gd-services')}
+    ${box(356,150,240,64,'DPU network engine','Hardware forwarding','gd-hardware')}
+    ${box(732,136,194,74,'Network fabric','Configured peer','gd-tenant')}
+    ${arrow('M476 121 V148','gd-control','gd-service-path-arrow')}
+    ${arrow('M242 182 H354','gd-packet-route','gd-service-path-arrow')}${arrow('M596 182 H730','gd-packet-route','gd-service-path-arrow')}
+    <rect x="12" y="258" width="936" height="178" rx="12" class="gd-lane gd-dpu"/>
+    ${label(32,287,'SECURITY · ARGUS MEMORY INSPECTION','gd-lane-title','start')}
+    ${box(32,325,210,74,'Host memory','Workload state','gd-host')}
+    ${box(356,325,240,74,'Argus on the DPU','Inspect and analyze','gd-services')}
+    ${box(732,325,194,74,'Security collector','Configured event export','gd-tenant')}
+    ${arrow('M242 361 H354','gd-control','gd-service-path-arrow')}${arrow('M596 361 H730','gd-control','gd-service-path-arrow')}
+    ${label(295,342,'memory','gd-small')}${label(661,342,'events','gd-small')}
+    ${phaseToken('M242 182 H730',0,3,'gd-packet')}${phaseToken('M242 361 H354',1,3)}${phaseToken('M596 361 H730',2,3)}
+  </svg>`;
+}
+
 export function guideDiagram(kind) {
   return `<figure class="guide-diagram" data-guide-diagram="${kind}" data-step="0">
     <div class="gd-toolbar"><span class="gd-heading">${headings[kind]}</span><div class="gd-controls" role="group" aria-label="Diagram animation">
@@ -120,9 +188,9 @@ export function guideDiagram(kind) {
       <button type="button" data-guide-next aria-label="Next step">Step →</button>
       <button type="button" data-guide-replay aria-label="Replay animation">↺</button>
     </div></div>
-    <div class="gd-legend"><span class="gd-legend-host">Host / management</span><span class="gd-legend-dpu">DPU infrastructure</span><span class="gd-legend-flow">${kind === 'modes' || kind === 'manual' ? 'Data packet' : 'Provisioning step'}</span></div>
+    <div class="gd-legend"><span class="gd-legend-host">Host / management</span><span class="gd-legend-dpu">DPU infrastructure</span><span class="gd-legend-flow">${kind === 'rollout' ? 'Management step' : kind === 'servicePaths' ? 'Packet (coral) / inspection (purple)' : kind === 'modes' || kind === 'manual' ? 'Data packet' : 'Provisioning step'}</span></div>
     ${kind === 'manual' ? '<p class="gd-path-key">Dashed arrows: management / configuration. Solid arrows: data forwarding. Playback explains the lifecycle; CLI progress is tracked below.</p>' : ''}
-    <div class="gd-scroll" role="region" tabindex="0" aria-label="${headings[kind]} diagram; scroll horizontally on small screens">${kind === 'modes' ? modeDrawing() : kind === 'manual' ? manualDrawing() : softwareDrawing()}</div>
+    <div class="gd-scroll" role="region" tabindex="0" aria-label="${headings[kind]} diagram; scroll horizontally on small screens">${kind === 'rollout' ? rolloutDrawing() : kind === 'servicePaths' ? servicePathsDrawing() : kind === 'modes' ? modeDrawing() : kind === 'manual' ? manualDrawing() : softwareDrawing()}</div>
     <p class="gd-scroll-hint">Swipe the diagram sideways to explore it. Keyboard: focus it and use the arrow keys.</p>
     <figcaption><strong data-guide-step></strong><p data-guide-caption aria-live="polite"></p></figcaption>
   </figure>`;
